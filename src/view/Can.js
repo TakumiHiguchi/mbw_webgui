@@ -1,70 +1,77 @@
 import React from "react";
-import GenericTemplate from "../components/dashboard/Dashboard";
+import axios from "axios";
+import Slider from "react-slick";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
+import Index from "./can/index";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Table from "../components/templates/Table";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+
+const ENDPOINT = 'http://localhost:3020'
+async function api(){
+  try{
+      const response = await axios.get(ENDPOINT + '/can')
+      if(response.data.status == "SUCCESS"){
+          return [true,response.data.result]
+      }else{
+          return [false,null]
+      }
+      
+  }catch(e){
+    console.log("通信に失敗しました。")
+    return [false,null]
+  }
+}
 
 class HomePage extends React.Component{
   constructor(props){
     super(props);
     this.state={
       isSidebar:true,
+      data:[]
     }
   }
   handleSidebar(){
     this.setState({isSidebar:!this.state.isSidebar})
   }
+  async getData(){
+    const result = await api();
+    if(result[0]){
+      let ins = result[1].map((data) =>{
+        return [data.title,data.type,data.status,data.count]
+      })
+      this.setState({data:ins})
+      
+    }
+  }
+
+  async componentDidMount(){
+    this.getData();
+  }
   render(){
+    const settings = {
+      dots: false,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      infinite: false,
+      arrows:false,
+      draggable:false,
+      swipe:false,
+      mobileFirst:true,
+      afterChange: () =>
+        this.setState(state => ({ updateCount: state.updateCount + 1 })),
+      beforeChange: (current, next) => this.setState({ slideIndex: next })
+    };
     return (
       <div className="App">
         <Header title={"執筆可能記事"} handleSidebar={() => this.handleSidebar()}/>
         <MainRoot>
           <Sidebar isOpen={this.state.isSidebar} />
           <Main style={styles.main}>
-            <Container maxWidth="lg">
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={8} lg={6} >
-                  <Typography component="h2" variant="h6" color="inherit" noWrap>
-                    歌詞解釈記事
-                  </Typography>
-                  <Paper>
-                    <List component="nav" aria-label="secondary mailbox folder">
-                        <ListItem button>
-                          <ListItemText primary="Trash" />
-                        </ListItem>
-                        <ListItem button>
-                          <ListItemText primary="Spam" />
-                        </ListItem>
-                      </List>
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} md={8} lg={6} >
-                  <Typography component="h2" variant="h6" color="inherit" noWrap>
-                    特集記事
-                  </Typography>
-                  <Paper>
-                    <List component="nav" aria-label="secondary mailbox folder">
-                        <ListItem button>
-                          <ListItemText primary="米津玄師 - Lemonの歌詞解釈記事の作成（最低2000文字）" />
-                        </ListItem>
-                        <ListItem button>
-                          <ListItemText primary="Spam" />
-                        </ListItem>
-                      </List>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Container>
+            <Slider ref={slider => (this.slider = slider)} {...settings}>
+              <Index data={this.state.data} />
+            </Slider>
           </Main>
         </MainRoot>
       </div>

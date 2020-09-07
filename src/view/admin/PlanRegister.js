@@ -70,7 +70,7 @@ class HomePage extends React.Component{
     super(props);
     this.state={
       isSidebar:true,
-      data:[["解釈記事","0.5円/1文字","￥500"]],
+      data:[],
       isPopup:-1,
     }
   }

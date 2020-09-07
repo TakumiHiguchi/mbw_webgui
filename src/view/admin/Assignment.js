@@ -49,10 +49,9 @@ const Styles = {
   },
 };
 
-async function api(email,name){
+async function api(){
   try{
-      const response = await axios.get(ENDPOINT + '/admin/planregister');
-      
+      const response = await axios.get(ENDPOINT + '/admin/assignment?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
       if(response.data.status == "SUCCESS"){
           return [true,response.data.result]
       }else{
@@ -70,7 +69,7 @@ class Assignment extends React.Component{
     super(props);
     this.state={
       isSidebar:true,
-      data:[["解釈記事","0.5円/1文字","￥500"]],
+      data:[],
       isPopup:-1,
     }
   }
@@ -79,9 +78,21 @@ class Assignment extends React.Component{
   }
   async getData(){
     const result = await api();
+    console.log(result)
     if(result[0]){
       let ins = result[1].map((data) =>{
-        return [data.name,data.email,data.maxAge,data.url]
+        let type = ''
+        let status = ''
+        switch(data.type){
+          case 0: type="歌詞解釈";break;
+          case 1: type="特集記事";break;
+        }
+        switch(data.status){
+          case 0: status="依頼中";break;
+          case 1: status="執筆中";break;
+          case 2: status="完成済み";break;
+        }
+        return [data.title,type,status,data.count]
       })
       this.setState({data:ins})
       console.log(result[1])

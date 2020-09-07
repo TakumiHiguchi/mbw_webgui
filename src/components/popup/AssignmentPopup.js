@@ -12,23 +12,21 @@ import Typography from '@material-ui/core/Typography';
 
 const ENDPOINT = 'http://localhost:3020'
 
-async function api(email,key,session,title,type,count){
+async function api(email,session,title,type,count){
   try{
       const response = await axios.post(ENDPOINT + '/admin/assignment', {
-          adminEmail: email,
-          key: key,
+          email: email,
           session:session,
           title:title,
           type:type,
           count:count
       });
-      
+      console.log(response)
       if(response.data.status == "SUCCESS"){
           return true
       }else{
           return false
       }
-      
   }catch(e){
     console.log("通信に失敗しました。")
     return false
@@ -50,7 +48,6 @@ class Popup extends React.Component{
     event.preventDefault();
     const result = await api(
       localStorage.getItem("email"),
-      localStorage.getItem("key"),
       localStorage.getItem("session"),
       this.state.title,
       parseInt(this.state.type),
@@ -60,6 +57,7 @@ class Popup extends React.Component{
       this.props.reload();
       this.props.action(false);
     }
+    
   }
   handleClickOutside() {
     this.props.action(false);
