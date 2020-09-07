@@ -1,0 +1,38 @@
+span.loading41 {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: 100%;
+    color: #999;
+  }
+  span.loading41 span {
+    display: inline-block;
+    width: 100px;
+    height: 2px;
+    vertical-align: middle;
+    background-position: 0 0;
+    background-repeat: repeat-x;
+    background-size: 4px 100px;
+    background-image:-webkit-gradient(linear, left top, right top, from(transparent), color-stop(0.5, transparent), color-stop(0.5, #999), to(#999) );
+    background-image:-webkit-linear-gradient(left,transparent 2px,#999 4px);
+    background-image: linear-gradient(to right,transparent 2px,#999 4px);
+    vertical-align: middle;
+    -webkit-animation: animation41 2s linear infinite;
+    animation: animation41 2s linear infinite;
+  }
+  
+  @-webkit-keyframes animation41 {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  @keyframes animation41 {
+    0% {
+      width: 0;
+    }
+    100% {
+      width: 100%;
+    }
+  }

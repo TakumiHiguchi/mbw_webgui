@@ -57,6 +57,28 @@ function ListItems(props){
         <ListItemText primary="お問い合わせ" />
       </ListItem>
       <Divider />
+        {localStorage.getItem("email") == "uiljpfs4fg5hsxzrnhknpdqfx@gmail.com" &&
+          <>
+            <Link to={"/planregist"} style={{display:'block',textDecoration:'none',color:'#000000'}}>
+              <ListItem button>
+                <ListItemIcon>
+                  <AssignmentIcon />
+                </ListItemIcon>
+                <ListItemText primary="登録予定者" />
+              </ListItem>
+            </Link>
+            <Link to={"/assignment"} style={{display:'block',textDecoration:'none',color:'#000000'}}>
+              <ListItem button>
+                <ListItemIcon>
+                  <AssignmentIcon />
+                </ListItemIcon>
+                <ListItemText primary="記事を依頼" />
+              </ListItem>
+            </Link>
+          </>
+        }
+        
+      <Divider />
       <ListItem button onClick={() => signout()}>
         <ListItemIcon>
           <ExitToAppIcon />

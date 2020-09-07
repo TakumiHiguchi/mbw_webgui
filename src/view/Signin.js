@@ -39,6 +39,7 @@ async function api(email,password){
       
       if(response.data.status == "SUCCESS"){
           localStorage.setItem("session", response.data.session);
+          localStorage.setItem("email", email);
           localStorage.setItem("maxAge", response.data.maxAge);
           return true
       }else{
@@ -59,7 +60,7 @@ const Styles = {
     alignItems: 'center',
   },
   avatar: {
-    
+    margin:'10px'
     
   },
   form: {
