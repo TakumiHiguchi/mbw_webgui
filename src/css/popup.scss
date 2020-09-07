@@ -16,7 +16,7 @@
         z-index:11;
         top:0;
         width:50%;
-        height:250px;
+        
         background:white;
         margin:0px auto 50px;
         left:0;
@@ -76,12 +76,12 @@
 
 .popup_effect{
     animation-name:topTobottom01;
-    animation-duration:0.4s;
+    animation-duration:0.6s;
     transform: scale(1);
 }
 .popup_effect_de{
     animation-name:topTobottomBack01;
-    animation-duration:0.4s;
+    animation-duration:0.6s;
     transform: scale(0); 
 }
 .profile_setting_popup_effect{
@@ -98,7 +98,7 @@
 @keyframes topTobottom01 {
     0% {
         opacity: 1;
-        transform: translateY(-30vh);
+        transform: translateY(-50vh);
     }
     100%{
         opacity: 1;
@@ -112,7 +112,7 @@
     }
     99%{
         opacity: 1;
-        transform: translateY(-30vh);
+        transform: translateY(-50vh);
     }
     100%{
         transform: translateY(-100vh);

@@ -3,7 +3,7 @@ import GenericTemplate from "../../components/dashboard/Dashboard";
 import axios from "axios";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
-import Popup from "../../components/popup/PlanregistPopup";
+import Popup from "../../components/popup/AssignmentPopup";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 
@@ -65,7 +65,7 @@ async function api(email,name){
   }
 }
 
-class HomePage extends React.Component{
+class Assignment extends React.Component{
   constructor(props){
     super(props);
     this.state={
@@ -94,7 +94,7 @@ class HomePage extends React.Component{
   render(){
     return (
       <div className="App">
-        <Header title={"登録予定者"} handleSidebar={() => this.handleSidebar()}/>
+        <Header title={"記事を依頼"} handleSidebar={() => this.handleSidebar()}/>
         <MainRoot>
           <Sidebar isOpen={this.state.isSidebar} />
           <Main style={styles.main}>
@@ -107,7 +107,7 @@ class HomePage extends React.Component{
               <Grid container spacing={3}>
                 <Grid item xs={12} md={8} lg={12} >
                   <Table 
-                    label={["名前","メールアドレス","有効期限","URL"]}
+                    label={["タイトル","種類","状況","最低文字数"]}
                     rows={this.state.data}
                   />
                 </Grid>
@@ -142,4 +142,4 @@ const styles={
     flexDirection: 'column',
   },
 }
-export default withRouter(styled(HomePage)``);
+export default withRouter(styled(Assignment)``);
