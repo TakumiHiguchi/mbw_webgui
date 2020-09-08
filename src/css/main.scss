@@ -1,3 +1,30 @@
+.scroll-y{
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling:touch;
+    &::-webkit-scrollbar {
+        display:none;
+    }
+}
+.scroll-x{
+    white-space: nowrap;
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display:none;
+    }
+}
+//エディタ
+.demo-wrapper{
+  height:100%;
+}
+.demo-editor{
+  height:calc(100% - 142px)!important;
+  padding:0 0 20px 0;
+}
+
 span.loading41 {
     display: inline-block;
     white-space: nowrap;
@@ -19,6 +46,8 @@ span.loading41 {
     -webkit-animation: animation41 2s linear infinite;
     animation: animation41 2s linear infinite;
   }
+  
+
   
   @-webkit-keyframes animation41 {
     0% {

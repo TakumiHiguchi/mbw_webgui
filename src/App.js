@@ -16,10 +16,12 @@ import {
 //scss
 import './css/popup.scss'
 import './css/main.scss'
+import './css/mbwStyle.scss'
 
 //view
 import Home from "./view/home";
 import Can from "./view/Can";
+import Can_edit from "./view/can/edit";
 import Written from "./view/Written";
 import Signin from "./view/Signin";
 import Signup from "./view/Signup";
@@ -36,6 +38,7 @@ function App() {
         <Switch>
           <PrivateRoute exact path="/" component={Home} />
           <PrivateRoute exact path="/can" component={Can}/>
+          <PrivateRoute exact path="/can/:key" component={Can_edit}/>
           <PrivateRoute exact path="/written" component={Written} />
           <Route exact path="/signin" component={Signin} />
           <Route exact path="/signup" component={Signup} />

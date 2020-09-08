@@ -1,5 +1,4 @@
 import React from "react";
-import GenericTemplate from "../components/dashboard/Dashboard";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import styled from "styled-components";
@@ -7,23 +6,56 @@ import { withRouter } from "react-router-dom";
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import Table from "../components/templates/Table";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import WrittenTable from "../components/templates/WrittenTable";
+import axios from "axios";
+
+const ENDPOINT = 'http://localhost:3020'
 
 class HomePage extends React.Component{
   constructor(props){
     super(props);
     this.state={
       isSidebar:true,
-      unitPrice:[["解釈記事","0.5円/1文字","￥500","再提出"]]
+      data:[]
     }
   }
   handleSidebar(){
     this.setState({isSidebar:!this.state.isSidebar})
+  }
+  async getData(){
+    try{
+      const response = await axios.get(ENDPOINT + '/unapproved_article?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
+      if(response.data.status == "SUCCESS"){
+          return [true,response.data.result]
+      }else{
+          return [false,null]
+      }
+    }catch(e){
+      console.log("通信に失敗しました。")
+      return [false,null]
+    }
+  }
+  async componentDidMount(){
+    const result = await this.getData();
+    if(result[0]){
+      let ins = result[1].map((data) =>{
+        let type = ''
+        let status = ''
+        switch(data.type){
+          case 0: type="歌詞解釈";break;
+          case 1: type="特集記事";break;
+        }
+        switch(data.status){
+          case 0: status="ERROR";break;
+          case 1: status="下書き";break;
+          case 2: status="研修中";break;
+          case 3: status="再提出";break;
+          case 4: status="完成済み";break;
+        }
+        return {title:data.title,type:data.type,status:data.status,typeString:type,statusString:status,key:data.key}
+      })
+      this.setState({data:ins})
+    }
   }
   render(){
     return (
@@ -35,9 +67,12 @@ class HomePage extends React.Component{
             <Container maxWidth="lg">
               <Grid container spacing={3}>
                 <Grid item xs={12} md={8} lg={12} >
-                  <Table 
-                    label={["名前","記事の種類","文字単価","ステータス"]}
-                    rows={this.state.unitPrice}
+                  <WrittenTable 
+                    label={["名前","記事の種類","ステータス",""]}
+                    rows={this.state.data}
+                    action={{
+                      click:(status,key) => this.props.history.push('/can/'+key)
+                    }}
                   />
                 </Grid>
               </Grid>

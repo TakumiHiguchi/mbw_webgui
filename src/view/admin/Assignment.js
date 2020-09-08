@@ -89,7 +89,7 @@ class Assignment extends React.Component{
         }
         switch(data.status){
           case 0: status="依頼中";break;
-          case 1: status="執筆中";break;
+          case 1: status="ユーザーが執筆しています";break;
           case 2: status="完成済み";break;
         }
         return [data.title,type,status,data.count]

@@ -23,7 +23,7 @@ function Index (props){
               {props.data.map((d) => 
                 <>
                   {d[1] === 0 &&
-                    <ListItem button>
+                    <ListItem button onClick={() => props.change(1,d[4],d[3])}>
                       <ListItemText primary={d[0]+ '（最低文字数: ' + d[3] +'文字）'} />
                     </ListItem>
                   }
@@ -41,7 +41,7 @@ function Index (props){
               {props.data.map((d) => 
                 <>
                   {d[1] === 1 &&
-                    <ListItem button>
+                    <ListItem button onClick={() => props.change(1,d[4],d[3])}>
                       <ListItemText primary={d[0] + '（最低文字数: ' + d[3] +'文字）'} />
                     </ListItem>
                   }
