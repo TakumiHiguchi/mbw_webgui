@@ -140,7 +140,7 @@ const PaperInner = styled.div`
 `
 const Inspection = styled.div`
   padding:0 10px 0 0;
-  width:90px;
+  width:100px;
   p{
     padding:0;
     margin:0;

@@ -26,16 +26,25 @@ export default function SimpleTable(props) {
                         <TableCell component="th" >{row.title}</TableCell>
                         <TableCell align="left">{row.typeString}</TableCell>
                         <TableCell align="left">{row.statusString}</TableCell>
-                        <TableCell align="left">{new Date(row.maxAge * 1000).toLocaleDateString()} {new Date(row.maxAge * 1000).toLocaleTimeString()}</TableCell>
-                        <TableCell align="right">
-                            {row.status === 1 &&
-                                <Button variant="contained" color="primary" style={{margin:'0 10px'}} onClick={() => props.action.click(row.status,row.key)}>
-                                    編集する
-                                </Button>
+                        <TableCell align="left">{row.count}</TableCell>
+                        <TableCell align="left">
+                            {row.submissionTime !== 0 &&
+                                <>
+                                    {new Date(row.maxAge * 1000).toLocaleDateString()} {new Date(row.maxAge * 1000).toLocaleTimeString()}
+                                </>
                             }
-                            {row.status === 3 &&
+                        </TableCell>
+                        <TableCell align="left">
+                            {row.submissionTime !== 0 &&
+                                <>
+                                    {new Date(row.submissionTime * 1000).toLocaleDateString()} {new Date(row.submissionTime * 1000).toLocaleTimeString()}
+                                </>
+                            }                   
+                        </TableCell>
+                        <TableCell align="right">
+                            {row.status === 2 &&
                                 <Button variant="contained" color="primary" style={{margin:'0 10px'}} onClick={() => props.action.click(row.status,row.key)}>
-                                    編集する
+                                    検修する
                                 </Button>
                             }
                         </TableCell>

@@ -25,6 +25,7 @@ import Can_edit from "./view/can/edit";
 import Written from "./view/Written";
 import Signin from "./view/Signin";
 import Signup from "./view/Signup";
+import Inspection from "./view/admin/Inspection"
 import PlanRegister from "./view/admin/PlanRegister";
 import PrivateRoute from './view/PrivateRoute';
 import Assignment from "./view/admin/Assignment";
@@ -46,6 +47,7 @@ function App() {
           {/*adminなのであとで変更*/}
           <Route exact path="/planregist" component={PlanRegister} />
           <Route exact path="/assignment" component={Assignment} />
+          <Route exact path="/assignment/:key" component={Inspection} />
           
           <Route render={() => <h1>ページが見つかりません</h1>} />
         </Switch>

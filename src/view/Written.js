@@ -52,7 +52,10 @@ class HomePage extends React.Component{
           case 3: status="再提出";break;
           case 4: status="完成済み";break;
         }
-        return {title:data.title,type:data.type,status:data.status,typeString:type,statusString:status,key:data.key}
+        if(Math.floor(new Date().getTime()/1000) > data.maxAge){
+          status = "提出期限切れ"
+        }
+        return {title:data.title,type:data.type,status:data.status,typeString:type,statusString:status,key:data.key,maxAge:data.maxAge}
       })
       this.setState({data:ins})
     }
@@ -68,7 +71,7 @@ class HomePage extends React.Component{
               <Grid container spacing={3}>
                 <Grid item xs={12} md={8} lg={12} >
                   <WrittenTable 
-                    label={["名前","記事の種類","ステータス",""]}
+                    label={["名前","記事の種類","ステータス","納期",""]}
                     rows={this.state.data}
                     action={{
                       click:(status,key) => this.props.history.push('/can/'+key)

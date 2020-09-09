@@ -10,7 +10,7 @@ import { withRouter } from "react-router-dom";
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import Table from "../../components/templates/Table";
+import AssignmentTable from "../../components/templates/AssignmentTable";
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 
@@ -90,12 +90,13 @@ class Assignment extends React.Component{
         switch(data.status){
           case 0: status="依頼中";break;
           case 1: status="ユーザーが執筆しています";break;
-          case 2: status="完成済み";break;
+          case 2: status="記事を研修してください";break;
+          case 3: status="再提出";break;
         }
-        return [data.title,type,status,data.count]
+        
+        return {title:data.title,type:data.type,status:data.status,typeString:type,statusString:status,key:data.key,maxAge:data.maxAge,count:data.count,submissionTime:data.submissionTime}
       })
       this.setState({data:ins})
-      console.log(result[1])
     }
   }
 
@@ -117,9 +118,12 @@ class Assignment extends React.Component{
               </Button>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={8} lg={12} >
-                  <Table 
-                    label={["タイトル","種類","状況","最低文字数"]}
+                  <AssignmentTable 
+                    label={["タイトル","種類","状況","最低文字数","納期","提出",""]}
                     rows={this.state.data}
+                    action={{
+                      click:(status,key) => this.props.history.push('/assignment/'+key)
+                    }}
                   />
                 </Grid>
               </Grid>

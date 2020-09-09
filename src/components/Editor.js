@@ -37,7 +37,7 @@ class ControlledEditor extends Component {
           wrapperClassName="demo-wrapper"
           editorClassName="demo-editor"
           onEditorStateChange={this.onEditorStateChange}
-          toolbarCustomButtons={[<MainContentButton />]}
+          toolbarCustomButtons={[<MainContentButton musicName={this.props.musicName} artist={this.props.artist}/>]}
         />
       </>
     )
