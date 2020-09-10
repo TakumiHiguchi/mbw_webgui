@@ -15,6 +15,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
+
 const ENDPOINT = 'http://localhost:3020'
 
 
@@ -90,6 +91,31 @@ class Inspection extends React.Component{
       if(result) this.props.history.push('/')
     }else{
 
+    }
+  }
+  async postArticle(description,releaseTime,tags){
+    const {key} = this.props.match.params
+    try{
+      const response = await axios.post(ENDPOINT + '/article', {
+        email: localStorage.getItem("email"),
+        session:localStorage.getItem("session"),
+        key:key,
+        title:this.state.title,
+        content:this.state.mainInsCont,
+        description:description,
+        releaseTime:releaseTime,
+        tags:tags
+      });
+      if(response.data.status == "SUCCESS"){
+          this.props.history.push('/')
+      }else{
+          console.log(response)
+          return false
+      }
+        
+    }catch(e){
+      console.log("通信に失敗しました。"+e)
+      return false
     }
   }
   async componentDidMount(){
@@ -188,7 +214,11 @@ class Inspection extends React.Component{
               </Grid>
             </Grid>
           </Container>
-          <InspectionDialog isOpen={this.state.isOpen} setOpen={(val) => this.setState({isOpen:val})}/>
+          <InspectionDialog 
+            isOpen={this.state.isOpen} 
+            setOpen={(val) => this.setState({isOpen:val})}
+            submit={(description,releaseTime,tags) => this.postArticle(description,releaseTime,tags)}
+          />
           </Main>
         </MainRoot>
       </div>

@@ -23,7 +23,7 @@ function Header(props) {
             <MenuIcon />
           </IconButton>
           <Typography component="h1" variant="h6" color="inherit" noWrap style={styles.title}>
-            bwPoster | {props.title}
+            music.branchwithWebGUI.β | {props.title}
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">

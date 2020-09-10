@@ -1,5 +1,6 @@
 import React from "react";
 import GenericTemplate from "../components/dashboard/Dashboard";
+import axios from "axios";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import styled from "styled-components";
@@ -14,16 +15,57 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
+const ENDPOINT = 'http://localhost:3020'
 class HomePage extends React.Component{
   constructor(props){
     super(props);
     this.state={
       isSidebar:true,
-      unitPrice:[["解釈記事","0.5円/1文字","￥500"]]
+      unitPrice:[["解釈記事","0.5円/1文字","￥500"]],
+      count:[0,0,0,0,0],
+      payment:[0,0,0]
     }
   }
   handleSidebar(){
     this.setState({isSidebar:!this.state.isSidebar})
+  }
+  async getData(email,session){
+    try{
+        const response = await axios.get(ENDPOINT + '/home?email='+email+'&session='+session)
+        console.log(response)
+        if(response.data.status == "SUCCESS"){
+            return [true,response.data.result]
+        }else{
+            return [false,null]
+        }
+        
+    }catch(e){
+      console.log("通信に失敗しました。")
+      return [false,null]
+    }
+  }
+  async componentDidMount(){
+    const result = await this.getData(localStorage.getItem("email"),localStorage.getItem("session"));
+    if(result[0]){
+      console.log(result[1])
+      this.setState({count:[
+        result[1].unaccepted.length,
+        result[1].resubmit.length,
+        result[1].draft.length,
+        result[1].completeMonth.length,
+        result[1].complete.length
+      ]})
+      if(result[1].payment.unsettled !== void 0){
+        this.setState({
+          payment:[
+            result[1].payment.unsettled,
+            result[1].payment.confirm,
+            result[1].payment.paid,
+          ]
+        });
+      }
+    }
+    
   }
   render(){
     return (
@@ -41,11 +83,11 @@ class HomePage extends React.Component{
                       検修状況
                     </Typography>
                     <div className="ens">
-                      <InspectionData label={"未検修"}/>
-                      <InspectionData label={"研修済み"}/>
-                      <InspectionData label={"再提出"}/>
-                      <InspectionData label={"完成（今月）"}/>
-                      <InspectionData label={"完成（累計）"}/>
+                      <InspectionData label={"下書き"} count={this.state.count[2]}/>
+                      <InspectionData label={"未検修"} count={this.state.count[0]}/>
+                      <InspectionData label={"再提出"} count={this.state.count[1]}/>
+                      <InspectionData label={"完成（今月）"} count={this.state.count[3]}/>
+                      <InspectionData label={"完成（累計）"} count={this.state.count[4]}/>
                     </div>
                     <p className="sub" style={{color:'white'}}>表示されているデータは現時点までのデータとなります。</p>
                   </PaperInner>
@@ -59,15 +101,16 @@ class HomePage extends React.Component{
                       お支払い
                     </Typography>
                     <div className="ens">
-                      <PaymentData label={"未確定"}/>
-                      <PaymentData label={"確定済み"}/>
-                      <PaymentData label={"支払い済み"}/>
+                      <PaymentData label={"未確定"} count={this.state.payment[0]}/>
+                      <PaymentData label={"確定済み"} count={this.state.payment[1]}/>
+                      <PaymentData label={"支払い済み"} count={this.state.payment[2]}/>
                     </div>
                     <p className="sub">お支払いは変更される場合があります。</p>
                   </PaperInner>
                   
                 </Paper>
               </Grid>
+              {/*
               <Grid item xs={12} md={8} lg={5} >
                 <Typography component="h2" variant="h6" color="inherit" noWrap>
                   執筆可能記事
@@ -83,6 +126,7 @@ class HomePage extends React.Component{
                     </List>
                 </Paper>
               </Grid>
+              */}
               <Grid item xs={4}>
                 <Typography component="h2" variant="h6" color="inherit" noWrap>
                   記事単価
@@ -107,7 +151,7 @@ const InspectionData = (props) => {
   return(
     <Inspection>
       <p className="label">{props.label}</p>
-      <p className="data"><span className="count">1</span><span className="unit">記事</span></p>
+      <p className="data"><span className="count">{props.count}</span><span className="unit">記事</span></p>
     </Inspection>
   )
 }
@@ -115,7 +159,7 @@ const PaymentData = (props) => {
   return(
     <Payment>
       <p className="label">{props.label}</p>
-      <p className="data"><span className="count">￥0</span></p>
+      <p className="data"><span className="count">￥{props.count}</span></p>
     </Payment>
   )
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import 'date-fns';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,6 +10,9 @@ import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import DateFnsUtils from '@date-io/date-fns';
+import Form from "../form/addTagForm";
+
 
 import {
   MuiPickersUtilsProvider,
@@ -28,6 +32,17 @@ const styles = (theme) => ({
     color: theme.palette.grey[500],
   },
 });
+
+const tagContainer={
+  display:'inline-block',
+  background:'#00aced',
+  borderRadius:'5000px',
+  padding:'3px 15px',
+  margin:'10px 10px 0px 0',
+  height:'1.2em',
+  color:'white',
+  lineHeight:'1.2em'
+}
 
 const DialogTitle = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
@@ -58,41 +73,65 @@ const DialogActions = withStyles((theme) => ({
 
 export default function CustomizedDialogs(props) {
   const [description, setDescription] = React.useState("");
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [tags, setTagsData] = React.useState([]);
   const handleClose = () => {
     props.setOpen(false);
   };
   const handleChange = (value) =>{
     setDescription(value)
   }
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+  const addTag = (tag) =>{
+    if(tag != ""){
+      let ins = [...tags, tag]
+      setTagsData(ins)
+    }
+  }
+  const handleSubmit = () =>{
+    props.submit(
+      description,
+      Math.floor( selectedDate.getTime() / 1000 ),
+      tags
+    )
+  }
   return (
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={props.isOpen}>
         <DialogTitle id="customized-dialog-title" onClose={handleClose}>
           詳細設定
         </DialogTitle>
-        <DialogContent dividers style={{width:'500px'}}>
-          <KeyboardDatePicker
-            disableToolbar
-            variant="inline"
-            format="MM/dd/yyyy"
-            margin="normal"
-            id="date-picker-inline"
-            label="公開日"
-            value={selectedDate}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          />
-          <KeyboardTimePicker
-            margin="normal"
-            id="time-picker"
-            label="公開時間"
-            value={selectedDate}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-              'aria-label': 'change time',
-            }}
-          />
+        <DialogContent dividers style={{width:'500px',paddingTop:0}}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <div className="flex-jus-around" style={{margin:'10px 0'}}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="inline"
+                format="MM/dd/yyyy"
+                margin="normal"
+                id="date-picker-inline"
+                label="公開日"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                style={{width:'45%'}}
+              />
+              <KeyboardTimePicker
+                margin="normal"
+                id="time-picker"
+                label="公開時間"
+                value={selectedDate}
+                onChange={handleDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change time',
+                }}
+                style={{width:'45%'}}
+              />
+            </div>
+          </MuiPickersUtilsProvider>
           <TextField 
               id="outlined-multiline-static"
               label="ディスクリプションを入力"
@@ -102,10 +141,14 @@ export default function CustomizedDialogs(props) {
               value={description}
               variant="outlined"
               onChange={(e) => handleChange(e.target.value)}
-            />
+          />
+          <Form addTag={(tag) => addTag(tag)}/>
+          {tags.map((d) =>
+            <div style={tagContainer}># {d}</div>
+          )}
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
+          <Button autoFocus onClick={() => handleSubmit()} color="primary">
             記事を公開する
           </Button>
         </DialogActions>

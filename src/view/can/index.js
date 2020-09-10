@@ -29,6 +29,11 @@ function Index (props){
                   }
                 </>
               )}
+              {props.data.length === 0 &&
+                <ListItem>
+                  <ListItemText primary={'依頼がありません。依頼が公開されるまでお待ちください。'} />
+                </ListItem>
+              }
             </List>
           </Paper>
         </Grid>
@@ -47,6 +52,11 @@ function Index (props){
                   }
                 </>
               )}
+              {props.data.length === 0 &&
+                <ListItem>
+                  <ListItemText primary={'依頼がありません。依頼が公開されるまでお待ちください。'} />
+                </ListItem>
+              }
             </List>
           </Paper>
         </Grid>
