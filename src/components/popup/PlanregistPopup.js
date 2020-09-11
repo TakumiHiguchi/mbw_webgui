@@ -12,10 +12,11 @@ const ENDPOINT = 'http://localhost:3020'
 async function api(email,name){
   try{
       const response = await axios.post(ENDPOINT + '/admin/planregister', {
-          email: email,
+          email: localStorage.getItem("email"),
+          session:localStorage.getItem("session"),
+          userEmail: email,
           name: name,
       });
-      
       if(response.data.status == "SUCCESS"){
           return true
       }else{
@@ -47,6 +48,7 @@ class Popup extends React.Component{
       this.props.reload();
       this.props.action(false);
     }
+    
   }
   handleClickOutside() {
     this.props.action(false);

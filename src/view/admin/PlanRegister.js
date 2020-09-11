@@ -51,7 +51,7 @@ const Styles = {
 
 async function api(email,name){
   try{
-      const response = await axios.get(ENDPOINT + '/admin/planregister');
+      const response = await axios.get(ENDPOINT + '/admin/planregister?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
       
       if(response.data.status == "SUCCESS"){
           return [true,response.data.result]
@@ -84,7 +84,6 @@ class HomePage extends React.Component{
         return [data.name,data.email,data.maxAge,data.url]
       })
       this.setState({data:ins})
-      console.log(result[1])
     }
   }
 

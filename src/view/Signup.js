@@ -14,6 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import CancelIcon from '@material-ui/icons/Cancel';
 import Container from '@material-ui/core/Container';
 import { withRouter } from "react-router-dom";
+import ResultWindow from '../components/ResultWindow'
 
 const ENDPOINT = 'http://localhost:3020'
 
@@ -82,6 +83,8 @@ class SignIn extends React.Component{
       email:"",
       password:"",
       params:{},
+      rWindow:{isRWindow:0,type:0,mes:""},
+      pSmes:false,
       user:{
         name:"",
         email:""
@@ -92,22 +95,47 @@ class SignIn extends React.Component{
   }
   handleChange(type,value){
     switch(type){
-      case "password": this.setState({password:value});break;
+      case "password": 
+        this.setState({
+          password:value,
+          pSmes:value.match(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{6,12}$/)
+          
+        });
+        break;
     }
+    
   }
-
+  rWindow(window_bool,type,cont){
+    let ins = this.state.rWindow;
+    if(window_bool){
+        ins.isRWindow = window_bool;
+    }else{
+        if(ins.isRWindow !== 0){
+            ins.isRWindow = window_bool;
+        }
+    }
+    
+    ins.type = type;
+    ins.mes = cont;
+    this.setState({rWindow:ins});
+  }
   async handleSubmit(event) {
     event.preventDefault();
     const password = event.target.password.value;
+    this.rWindow(true,0,"作成中...");
     const result = await signup(this.state.user.email,password,this.state.params.k,this.state.params.s);
     if(result){
       if(result.status == "SUCCESS"){
         //作成成功
+        this.rWindow(true,1,"アカウントを作成しました。サインインしてください");
+        setTimeout(async () => {
+          this.props.history.push('/')
+        }, 3000);
       }else{
-        //作成失敗
+        this.rWindow(true,1,"アカウントの作成に失敗しました");
       }
     }else{
-      //エラー
+      this.rWindow(true,1,"エラーが発生しました");
     }
   }
 
@@ -180,6 +208,9 @@ class SignIn extends React.Component{
                   value={this.state.password}
                   onChange={(e) => this.handleChange("password",e.target.value)}
                 />
+                {!this.state.pSmes &&
+                  <div>半角6~12文字英大文字・小文字・数字それぞれ１文字以上含む必要があります</div>
+                } 
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}
                   label={user.name + "さんでお間違いありませんか？"}
@@ -224,6 +255,7 @@ class SignIn extends React.Component{
             }
           </>
         }
+        <ResultWindow value={this.state.rWindow} action={(a,b,c) => this.rWindow(a,this.state.rWindow.type,this.state.rWindow.mes)}/>
       </Container>
     );
   }

@@ -28,6 +28,7 @@ import Signup from "./view/Signup";
 import Inspection from "./view/admin/Inspection"
 import PlanRegister from "./view/admin/PlanRegister";
 import PrivateRoute from './view/PrivateRoute';
+import AdminRoute from './view/AdminRoute';
 import Assignment from "./view/admin/Assignment";
 //css
 import './App.scss';
@@ -45,9 +46,9 @@ function App() {
           <Route exact path="/signup" component={Signup} />
 
           {/*adminなのであとで変更*/}
-          <Route exact path="/planregist" component={PlanRegister} />
-          <Route exact path="/assignment" component={Assignment} />
-          <Route exact path="/assignment/:key" component={Inspection} />
+          <AdminRoute exact path="/planregist" component={PlanRegister} />
+          <AdminRoute exact path="/assignment" component={Assignment} />
+          <AdminRoute exact path="/assignment/:key" component={Inspection} />
           
           <Route render={() => <h1>ページが見つかりません</h1>} />
         </Switch>
