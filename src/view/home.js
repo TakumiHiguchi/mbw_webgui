@@ -21,7 +21,7 @@ class HomePage extends React.Component{
     super(props);
     this.state={
       isSidebar:true,
-      unitPrice:[["解釈記事","0.5円/1文字","￥500"]],
+      unitPrice:[["解釈記事","0.25円/1文字","￥500"]],
       count:[0,0,0,0,0],
       payment:[0,0,0]
     }
@@ -31,8 +31,8 @@ class HomePage extends React.Component{
   }
   async getData(email,session){
     try{
-        const response = await axios.get(ENDPOINT + '/home?email='+email+'&session='+session)
-        console.log(response)
+        const response = await axios.get(ENDPOINT + '/api/v1/webgui/writer/home?email='+email+'&session='+session)
+
         if(response.data.status == "SUCCESS"){
             return [true,response.data.result]
         }else{
@@ -47,7 +47,7 @@ class HomePage extends React.Component{
   async componentDidMount(){
     const result = await this.getData(localStorage.getItem("email"),localStorage.getItem("session"));
     if(result[0]){
-      console.log(result[1])
+
       this.setState({count:[
         result[1].unaccepted.length,
         result[1].resubmit.length,
@@ -55,7 +55,7 @@ class HomePage extends React.Component{
         result[1].completeMonth.length,
         result[1].complete.length
       ]})
-      if(result[1].payment.unsettled !== void 0){
+      if(result[1].payment != null && result[1].payment.unsettled !== void 0){
         this.setState({
           payment:[
             result[1].payment.unsettled,

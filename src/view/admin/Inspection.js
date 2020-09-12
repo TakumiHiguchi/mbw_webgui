@@ -42,7 +42,7 @@ class Inspection extends React.Component{
   
   async getData(key,email,session){
     try{
-        const response = await axios.get(ENDPOINT + '/admin/assignment/edit/'+key+'?email='+email+'&session='+session)
+        const response = await axios.get(ENDPOINT + '/api/v1/webgui/article_request/'+key+'/edit?email='+email+'&session='+session)
         if(response.data.status == "SUCCESS"){
             return [true,response.data.result]
         }else{
@@ -57,7 +57,7 @@ class Inspection extends React.Component{
 
   async reSubmit(key){
     try{
-        const response = await axios.post(ENDPOINT + '/admin/resubmit', {
+        const response = await axios.post(ENDPOINT + '/api/v1/webgui/article_request/resubmit', {
           email: localStorage.getItem("email"),
           session:localStorage.getItem("session"),
           key:key
@@ -96,7 +96,7 @@ class Inspection extends React.Component{
   async postArticle(description,releaseTime,tags){
     const {key} = this.props.match.params
     try{
-      const response = await axios.post(ENDPOINT + '/article', {
+      const response = await axios.post(ENDPOINT + '/api/v1/webgui/article', {
         email: localStorage.getItem("email"),
         session:localStorage.getItem("session"),
         key:key,
@@ -122,15 +122,15 @@ class Inspection extends React.Component{
     const {key} = this.props.match.params
     const result = await this.getData(key,localStorage.getItem("email"),localStorage.getItem("session"));
     if(result[0]){
-      const count = result[1][0].content.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
+      const count = result[1].content.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
       this.setState({
-        mainInsCont:result[1][0].content,
-        count:result[1][0].count,
+        mainInsCont:result[1].content,
+        count:result[1].count,
         apiEnd:true,
         chrCount:count,
-        title:result[1][0].title,
+        title:result[1].title,
       })
-      console.log(result[1][0])
+      console.log(result[1])
     }else{
       this.props.history.push('/')
     }

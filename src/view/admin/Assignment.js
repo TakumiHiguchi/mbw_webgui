@@ -51,7 +51,7 @@ const Styles = {
 
 async function api(){
   try{
-      const response = await axios.get(ENDPOINT + '/admin/assignment?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
+      const response = await axios.get(ENDPOINT + '/api/v1/webgui/article_request?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
       if(response.data.status == "SUCCESS"){
           return [true,response.data.result]
       }else{
@@ -78,7 +78,6 @@ class Assignment extends React.Component{
   }
   async getData(){
     const result = await api();
-    console.log(result)
     if(result[0]){
       let ins = result[1].map((data) =>{
         let type = ''

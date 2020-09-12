@@ -11,7 +11,7 @@ const ENDPOINT = 'http://localhost:3020'
 
 async function api(email,name){
   try{
-      const response = await axios.post(ENDPOINT + '/admin/planregister', {
+      const response = await axios.post(ENDPOINT + '/api/v1/webgui/plan_register', {
           email: localStorage.getItem("email"),
           session:localStorage.getItem("session"),
           userEmail: email,

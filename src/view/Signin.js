@@ -32,7 +32,7 @@ function Copyright() {
 
 async function api(email,password){
   try{
-      const response = await axios.post(ENDPOINT + '/user/signin', {
+      const response = await axios.post(ENDPOINT + '/api/v1/webgui/writer/signin', {
           email: email,
           phrase: password,
       });

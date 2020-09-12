@@ -75,6 +75,14 @@ function ListItems(props){
                 <ListItemText primary="記事を依頼" />
               </ListItem>
             </Link>
+            <Link to={"/article"} style={{display:'block',textDecoration:'none',color:'#000000'}}>
+              <ListItem button>
+                <ListItemIcon>
+                  <AssignmentIcon />
+                </ListItemIcon>
+                <ListItemText primary="記事一覧" />
+              </ListItem>
+            </Link>
           </>
         }
         

@@ -1,9 +1,7 @@
 import React from "react";
-import GenericTemplate from "../../components/dashboard/Dashboard";
 import axios from "axios";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
-import Popup from "../../components/popup/PlanregistPopup";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 
@@ -51,8 +49,7 @@ const Styles = {
 
 async function api(email,name){
   try{
-      const response = await axios.get(ENDPOINT + '/api/v1/webgui/plan_register?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
-      
+      const response = await axios.get(ENDPOINT + '/api/v1/webgui/article?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
       if(response.data.status == "SUCCESS"){
           return [true,response.data.result]
       }else{
@@ -79,9 +76,10 @@ class HomePage extends React.Component{
   }
   async getData(){
     const result = await api();
+    console.log(result)
     if(result[0]){
       let ins = result[1].map((data) =>{
-        return [data.name,data.email,data.maxAge,data.url]
+        return [data.title,data.key,data.releaseTime]
       })
       this.setState({data:ins})
     }
@@ -93,31 +91,21 @@ class HomePage extends React.Component{
   render(){
     return (
       <div className="App">
-        <Header title={"登録予定者"} handleSidebar={() => this.handleSidebar()}/>
+        <Header title={"記事一覧"} handleSidebar={() => this.handleSidebar()}/>
         <MainRoot>
           <Sidebar isOpen={this.state.isSidebar} />
           <Main style={styles.main}>
             <Container maxWidth="lg">
-              <Button variant="contained" color="primary" style={{marginBottom:"10px"}} 
-                onClick={() => this.setState({isPopup:true})}
-              >
-                新しく作成する
-              </Button>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={8} lg={12} >
                   <Table 
-                    label={["名前","メールアドレス","有効期限","URL"]}
+                    label={["名前","ステータス","URL"]}
                     rows={this.state.data}
                   />
                 </Grid>
               </Grid>
             </Container>
           </Main>
-          <Popup 
-            isPopup={this.state.isPopup} 
-            action={(val) => this.setState({isPopup:val})}
-            reload={() => this.getData()}
-          />
         </MainRoot>
       </div>
     );

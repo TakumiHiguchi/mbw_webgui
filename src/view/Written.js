@@ -24,7 +24,7 @@ class HomePage extends React.Component{
   }
   async getData(){
     try{
-      const response = await axios.get(ENDPOINT + '/unapproved_article?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
+      const response = await axios.get(ENDPOINT + '/api/v1/webgui/unapproved_article?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
       if(response.data.status == "SUCCESS"){
           return [true,response.data.result]
       }else{

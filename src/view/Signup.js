@@ -33,7 +33,8 @@ function Copyright() {
 
 async function api(key,session){
   try{
-      const response = await axios.get(ENDPOINT + '/admin/planregister/'+key+'?session='+session);
+      const response = await axios.get(ENDPOINT + '/api/v1/webgui/plan_register/'+key+'?session='+session);
+      console.log(response)
       return response.data
   }catch(e){
     console.log("通信に失敗しました。")
@@ -43,7 +44,7 @@ async function api(key,session){
 
 async function signup(email,password,key,session){
   try{
-      const response = await axios.post(ENDPOINT + '/user/signup', {
+      const response = await axios.post(ENDPOINT + '/api/v1/webgui/writer/signup', {
           email: email,
           phrase: password,
           key:key,

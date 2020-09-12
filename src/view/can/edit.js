@@ -22,7 +22,8 @@ let nTimer;
 const ENDPOINT = 'http://localhost:3020'
 async function getArticleData(key,email,session){
   try{
-      const response = await axios.get(ENDPOINT + '/unapproved_article/edit/'+key+'?email='+email+'&session='+session)
+      const response = await axios.get(ENDPOINT + '/api/v1/webgui/unapproved_article/'+key+'/edit?email='+email+'&session='+session)
+      
       if(response.data.status == "SUCCESS"){
           return [true,response.data.result]
       }else{
@@ -38,7 +39,7 @@ async function updateArticle(key,content,type){
   let isSubmission = false
   if(type === 0) isSubmission = true;
   try{
-      const response = await axios.patch(ENDPOINT + '/unapproved_article/'+key, {
+      const response = await axios.patch(ENDPOINT + '/api/v1/webgui/unapproved_article/'+key, {
         email: localStorage.getItem("email"),
         session:localStorage.getItem("session"),
         key:key,
@@ -48,7 +49,7 @@ async function updateArticle(key,content,type){
     if(response.data.status == "SUCCESS"){
         return true
     }else{
-        console.log(response)
+        
         return false
     }
       
@@ -115,9 +116,10 @@ class Edit extends React.Component{
   async componentDidMount(){
     const {key} = this.props.match.params
     const result = await getArticleData(key,localStorage.getItem("email"),localStorage.getItem("session"))
+
     if(result[0]){
-      const count = result[1][0].content.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
-      this.setState({mainInsCont:result[1][0].content,count:result[1][0].count,apiEnd:true,chrCount:count})
+      const count = result[1].content.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
+      this.setState({mainInsCont:result[1].content,count:result[1].count,apiEnd:true,chrCount:count})
     }else{
       this.props.history.push('/')
     }

@@ -13,7 +13,7 @@ import { withRouter } from "react-router-dom";
 const ENDPOINT = 'http://localhost:3020'
 async function api(){
   try{
-      const response = await axios.get(ENDPOINT + '/can')
+      const response = await axios.get(ENDPOINT + '/api/v1/webgui/article_request/can?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
       if(response.data.status == "SUCCESS"){
           return [true,response.data.result]
       }else{
@@ -53,12 +53,14 @@ class HomePage extends React.Component{
     }
   }
   async assign(){
+    
     try{
-      const response = await axios.post(ENDPOINT + '/unapproved_article', {
+      const response = await axios.post(ENDPOINT + '/api/v1/webgui/unapproved_article', {
           email: localStorage.getItem("email"),
           session:localStorage.getItem("session"),
           key:this.state.clickKey
       });
+      
       if(response.data.status == "SUCCESS"){
           this.getData();
           this.props.history.push('/can/'+this.state.clickKey)

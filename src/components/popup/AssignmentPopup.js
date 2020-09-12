@@ -14,14 +14,13 @@ const ENDPOINT = 'http://localhost:3020'
 
 async function api(email,session,title,type,count){
   try{
-      const response = await axios.post(ENDPOINT + '/admin/assignment', {
+      const response = await axios.post(ENDPOINT + '/api/v1/webgui/article_request', {
           email: email,
           session:session,
           title:title,
           type:type,
           count:count
       });
-      console.log(response)
       if(response.data.status == "SUCCESS"){
           return true
       }else{
