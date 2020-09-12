@@ -13,7 +13,7 @@ import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 
 
-const ENDPOINT = 'http://localhost:3020'
+const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 
 function Copyright() {
   return (
@@ -49,7 +49,7 @@ const Styles = {
 
 async function api(email,name){
   try{
-      const response = await axios.get(ENDPOINT + '/api/v1/webgui/article?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
+      const response = await axios.get(ENDPOINT + '/api/v1/webgui/article');
       if(response.data.status == "SUCCESS"){
           return [true,response.data.result]
       }else{

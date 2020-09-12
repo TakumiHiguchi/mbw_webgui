@@ -15,7 +15,7 @@ import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 
 
-const ENDPOINT = 'http://localhost:3020'
+const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 
 function Copyright() {
   return (

@@ -6,8 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import Typography from '@material-ui/core/Typography';
-
-const ENDPOINT = 'http://localhost:3020'
+const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 
 async function api(email,name){
   try{

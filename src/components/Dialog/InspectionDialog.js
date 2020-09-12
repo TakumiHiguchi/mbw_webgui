@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import DateFnsUtils from '@date-io/date-fns';
 import Form from "../form/addTagForm";
+import Dropzone from 'react-dropzone'
 
 
 import {
@@ -75,6 +76,7 @@ export default function CustomizedDialogs(props) {
   const [description, setDescription] = React.useState("");
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [tags, setTagsData] = React.useState([]);
+  const [thumbnail, setThumbnail] = React.useState("");
   const handleClose = () => {
     props.setOpen(false);
   };
@@ -84,6 +86,14 @@ export default function CustomizedDialogs(props) {
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
+  const createBase64Thumbnail = (thumbnail) =>{
+    let reader = new FileReader();
+    reader.readAsDataURL(thumbnail[0]);
+    reader.onload = async () => {
+      setThumbnail(reader.result)
+    }
+  }
+
   const addTag = (tag) =>{
     if(tag != ""){
       let ins = [...tags, tag]
@@ -94,7 +104,8 @@ export default function CustomizedDialogs(props) {
     props.submit(
       description,
       Math.floor( selectedDate.getTime() / 1000 ),
-      tags
+      tags,
+      thumbnail
     )
   }
   return (
@@ -104,6 +115,16 @@ export default function CustomizedDialogs(props) {
         </DialogTitle>
         <DialogContent dividers style={{width:'500px',paddingTop:0}}>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <Dropzone onDrop={acceptedFiles => createBase64Thumbnail(acceptedFiles)}>
+              {({getRootProps, getInputProps}) => (
+                <section>
+                  <div {...getRootProps()}>
+                    <input {...getInputProps()} />
+                    <p>ファイルをドロップか選択</p>
+                  </div>
+                </section>
+              )}
+            </Dropzone>
             <div className="flex-jus-around" style={{margin:'10px 0'}}>
               <KeyboardDatePicker
                 disableToolbar

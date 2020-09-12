@@ -10,7 +10,7 @@ import { withRouter } from "react-router-dom";
 
 
 
-const ENDPOINT = 'http://localhost:3020'
+const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 async function api(){
   try{
       const response = await axios.get(ENDPOINT + '/api/v1/webgui/article_request/can?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))

@@ -10,7 +10,7 @@ import Radio from '@material-ui/core/Radio';
 
 import Typography from '@material-ui/core/Typography';
 
-const ENDPOINT = 'http://localhost:3020'
+const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 
 async function api(email,session,title,type,count){
   try{

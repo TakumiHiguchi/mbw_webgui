@@ -19,10 +19,10 @@ import TextField from '@material-ui/core/TextField';
 
 
 let nTimer;
-const ENDPOINT = 'http://localhost:3020'
+const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 async function getArticleData(key,email,session){
   try{
-      const response = await axios.get(ENDPOINT + '/api/v1/webgui/unapproved_article/'+key+'/edit?email='+email+'&session='+session)
+      const response = await axios.get(ENDPOINT + 'api/v1/webgui/unapproved_article/'+key+'/edit?email='+email+'&session='+session)
       
       if(response.data.status == "SUCCESS"){
           return [true,response.data.result]
@@ -39,7 +39,7 @@ async function updateArticle(key,content,type){
   let isSubmission = false
   if(type === 0) isSubmission = true;
   try{
-      const response = await axios.patch(ENDPOINT + '/api/v1/webgui/unapproved_article/'+key, {
+      const response = await axios.patch(ENDPOINT + 'api/v1/webgui/unapproved_article/'+key, {
         email: localStorage.getItem("email"),
         session:localStorage.getItem("session"),
         key:key,

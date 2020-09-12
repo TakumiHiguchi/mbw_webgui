@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import WrittenTable from "../components/templates/WrittenTable";
 import axios from "axios";
 
-const ENDPOINT = 'http://localhost:3020'
+const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 
 class HomePage extends React.Component{
   constructor(props){

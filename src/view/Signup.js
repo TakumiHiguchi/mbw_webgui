@@ -16,7 +16,7 @@ import Container from '@material-ui/core/Container';
 import { withRouter } from "react-router-dom";
 import ResultWindow from '../components/ResultWindow'
 
-const ENDPOINT = 'http://localhost:3020'
+const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 
 function Copyright() {
   return (

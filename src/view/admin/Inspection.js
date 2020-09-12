@@ -16,7 +16,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 
-const ENDPOINT = 'http://localhost:3020'
+const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 
 
 class Inspection extends React.Component{
@@ -93,8 +93,8 @@ class Inspection extends React.Component{
 
     }
   }
-  async postArticle(description,releaseTime,tags){
-    const {key} = this.props.match.params
+  async postArticle(description,releaseTime,tags,thumbnail){
+    const {key} = this.props.match.params;
     try{
       const response = await axios.post(ENDPOINT + '/api/v1/webgui/article', {
         email: localStorage.getItem("email"),
@@ -104,6 +104,7 @@ class Inspection extends React.Component{
         content:this.state.mainInsCont,
         description:description,
         releaseTime:releaseTime,
+        thumbnail:thumbnail,
         tags:tags
       });
       if(response.data.status == "SUCCESS"){
@@ -112,7 +113,7 @@ class Inspection extends React.Component{
           console.log(response)
           return false
       }
-        
+          
     }catch(e){
       console.log("通信に失敗しました。"+e)
       return false
@@ -217,7 +218,7 @@ class Inspection extends React.Component{
           <InspectionDialog 
             isOpen={this.state.isOpen} 
             setOpen={(val) => this.setState({isOpen:val})}
-            submit={(description,releaseTime,tags) => this.postArticle(description,releaseTime,tags)}
+            submit={(description,releaseTime,tags,thumbnail) => this.postArticle(description,releaseTime,tags,thumbnail)}
           />
           </Main>
         </MainRoot>
