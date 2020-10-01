@@ -77,7 +77,7 @@ class Edit extends React.Component{
     this.setState({isSidebar:!this.state.isSidebar})
   }
   handleOnChange(val){
-    const count = val.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
+    const count = val.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length
     this.setState({mainInsCont:val,chrCount:count});
     if(nTimer){clearTimeout(nTimer);}
     nTimer = setTimeout(async () => {

@@ -1,12 +1,11 @@
 import React from "react";
 import axios from "axios";
 import Slider from "react-slick";
-import Header from "../../components/Header";
-import Sidebar from "../../components/Sidebar";
-import Editor from "../../components/Editor";
-import InspectionDialog from "../../components/Dialog/InspectionDialog";
+import Editor from "../../../components/Editor";
+import InspectionDialog from "../../../components/Dialog/InspectionDialog";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
+import PageTemplate from "../../../components/templates/page";
 
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -18,8 +17,7 @@ import TextField from '@material-ui/core/TextField';
 
 const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 
-
-class Inspection extends React.Component{
+class HomePage extends React.Component{
   constructor(props){
     super(props);
     this.state={
@@ -34,63 +32,7 @@ class Inspection extends React.Component{
       apiEnd:false,
       title:"",
       description:"",
-    }
-  }
-  handleSidebar(){
-    this.setState({isSidebar:!this.state.isSidebar})
-  }
-  
-  async getData(key,email,session){
-    try{
-        const response = await axios.get(ENDPOINT + '/api/v1/webgui/article_request/'+key+'/edit?email='+email+'&session='+session)
-        if(response.data.status == "SUCCESS"){
-            return [true,response.data.result]
-        }else{
-            return [false,null]
-        }
-        
-    }catch(e){
-      console.log("通信に失敗しました。")
-      return [false,null]
-    }
-  }
-
-  async reSubmit(key){
-    try{
-        const response = await axios.post(ENDPOINT + '/api/v1/webgui/article_request/resubmit', {
-          email: localStorage.getItem("email"),
-          session:localStorage.getItem("session"),
-          key:key
-      });
-      if(response.data.status == "SUCCESS"){
-          return true
-      }else{
-          console.log(response)
-          return false
-      }
-        
-    }catch(e){
-      console.log("通信に失敗しました。"+e)
-      return false
-    }
-  }
-  handleOnChange(val){
-    const count = val.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
-    this.setState({mainInsCont:val,chrCount:count});
-  }
-  handleOnTfChange(type,value){
-    switch(type){
-      case "title": this.setState({title:value});break;
-      case "description": this.setState({description:value});break;
-    }
-  }
-  handleOnSubmit(type){
-    const {key} = this.props.match.params
-    if(type === 0){
-      const result = this.reSubmit(key);
-      if(result) this.props.history.push('/')
-    }else{
-
+      editorType:true,
     }
   }
   async postArticle(description,releaseTime,tags,thumbnail){
@@ -120,30 +62,22 @@ class Inspection extends React.Component{
     }
   }
   async componentDidMount(){
-    const {key} = this.props.match.params
-    const result = await this.getData(key,localStorage.getItem("email"),localStorage.getItem("session"));
-    if(result[0]){
-      const count = result[1].content.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
-      this.setState({
-        mainInsCont:result[1].content,
-        count:result[1].count,
-        apiEnd:true,
-        chrCount:count,
-        title:result[1].title,
-      })
-    }else{
-      this.props.history.push('/')
+
+  }
+  handleOnChange(val){
+    const count = val.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
+    this.setState({mainInsCont:val,chrCount:count});
+  }
+  handleOnTfChange(type,value){
+    switch(type){
+      case "title": this.setState({title:value});break;
+      case "description": this.setState({description:value});break;
     }
   }
   render(){
-    const {key} = this.props.match.params
     return (
-      <div className="App">
-        <Header title={key + "を検修"} handleSidebar={() => this.handleSidebar()}/>
-        <MainRoot>
-          <Sidebar isOpen={this.state.isSidebar} />
-          <Main style={styles.main}>
-          <Container maxWidth="lg">
+      <PageTemplate>
+        <Container maxWidth="lg">
             <Grid container spacing={3}>
               <Grid item xs={12} md={8} lg={12} className="flex-jus-between">
                 <Grid item xs={12} md={8} lg={10} >
@@ -164,33 +98,22 @@ class Inspection extends React.Component{
                 <Grid item xs={12} md={8} lg={5} style={{textAlign:'right'}}>
                   <div style={{display:'inline-block',marginRight:'15px'}}>{this.state.chrCount} / {this.state.count}文字</div>
                   <Button
-                    type="submit"
-                    variant="contained"
-                    style={{marginRight:'15px'}}
-                    onClick={() => this.handleOnSubmit(0)}
-                  >
-                    再提出させる
-                  </Button>
-                  {parseInt(this.state.chrCount) <= parseInt(this.state.count) ?
-                    <Button
-                      disabled
                       type="submit"
                       variant="contained"
                       color="primary"
+                      onClick={() => this.setState({editorType:!this.state.editorType})}
                     >
-                      詳細設定
+                      切り替え
                     </Button>
-                  :
-                    <Button
-                      
+                  <Button
                       type="submit"
                       variant="contained"
                       color="primary"
                       onClick={() => this.setState({isOpen:true})}
                     >
-                      詳細設定
+                      公開
                     </Button>
-                  }
+
                 </Grid>
               </Grid>
               <Grid item xs={12} md={8} lg={4} >
@@ -202,13 +125,15 @@ class Inspection extends React.Component{
               </Grid>
               <Grid item xs={12} md={8} lg={8} >
                 <Card style={{height:'calc(100vh - 204px)',padding:'10px'}}>
-                  {this.state.apiEnd &&
+                  {this.state.editorType ?
                     <Editor 
-                      change={(val) => this.handleOnChange(val)}
-                      htmlIns={this.state.mainInsCont}
-                      musicName={this.state.musicName}
-                      artist={this.state.artist}
+                        change={(val) => this.handleOnChange(val)}
+                        htmlIns={this.state.mainInsCont}
+                        musicName={this.state.musicName}
+                        artist={this.state.artist}
                     />
+                  :
+                    <textarea value={this.state.mainInsCont} onChange={(val) => this.handleOnChange(val.target.value)} style={{width:'100%',height:'100%'}}/>
                   }
                 </Card>
               </Grid>
@@ -219,28 +144,33 @@ class Inspection extends React.Component{
             setOpen={(val) => this.setState({isOpen:val})}
             submit={(description,releaseTime,tags,thumbnail) => this.postArticle(description,releaseTime,tags,thumbnail)}
           />
-          </Main>
-        </MainRoot>
-      </div>
+      </PageTemplate>
     );
   }
 }
 
-const MainRoot = styled.div`
+const Tr = styled.div`
   display:flex;
-  padding-top:64px;
-  height:calc(100vh - 64px)
+  width:100%;
+  padding:10px 0;
+  border-bottom:1px solid #f0f0f0;
+`
+const Td = styled.div`
+  display: -webkit-box;
+  overflow: hidden;
+  word-break: break-all;
+  word-wrap: break-word;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  max-width: 100%;
+  font-size: 0.9em;
+  line-height:25px;
+  min-height: 25px;
+  text-decoration:none;
 `
 const Main = styled.main`
   width:100%;
   padding-top:20px;
 `
 
-const styles={
-  paper: {
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-}
-export default withRouter(styled(Inspection)``);
+export default withRouter(styled(HomePage)``);

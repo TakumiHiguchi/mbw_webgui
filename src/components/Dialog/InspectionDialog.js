@@ -86,12 +86,13 @@ export default function CustomizedDialogs(props) {
   const handleDateChange = (date) => {
     setSelectedDate(date);
   };
-  const createBase64Thumbnail = (thumbnail) =>{
+  const createBase64Thumbnail = (thum) =>{
     let reader = new FileReader();
-    reader.readAsDataURL(thumbnail[0]);
+    reader.readAsDataURL(thum[0]);
     reader.onload = async () => {
       setThumbnail(reader.result)
     }
+    
   }
 
   const addTag = (tag) =>{
