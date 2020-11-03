@@ -1,0 +1,18 @@
+version: '3.5'
+services:
+  node:
+    build: .
+    volumes:
+      - ./:/mbw_submission
+    command: sh -c "yarn start"
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    environment:
+      - ROOT_URL=http://mbw-webgui.localhost
+      - VIRTUAL_HOST=mbw-webgui.localhost
+    networks:
+      - mbw_proxy-network
+networks:
+  mbw_proxy-network:
+    name: mbw_proxy-network
