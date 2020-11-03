@@ -1,5 +1,4 @@
 import React from "react";
-import GenericTemplate from "../components/dashboard/Dashboard";
 import axios from "axios";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
@@ -11,11 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Table from "../components/templates/Table";
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 class HomePage extends React.Component{
   constructor(props){
     super(props);
@@ -31,10 +26,10 @@ class HomePage extends React.Component{
   }
   async getData(email,session){
     try{
-        const response = await axios.get(ENDPOINT + '/api/v1/webgui/writer/home?email='+email+'&session='+session)
+        const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/writer/home?email='+email+'&session='+session)
 
-        if(response.data.status == "SUCCESS"){
-            return [true,response.data.result]
+        if(response.status == 200){
+            return [true,response.data]
         }else{
             return [false,null]
         }
@@ -47,7 +42,6 @@ class HomePage extends React.Component{
   async componentDidMount(){
     const result = await this.getData(localStorage.getItem("email"),localStorage.getItem("session"));
     if(result[0]){
-
       this.setState({count:[
         result[1].unaccepted.length,
         result[1].resubmit.length,

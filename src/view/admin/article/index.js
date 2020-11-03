@@ -13,13 +13,10 @@ import Table from "../../../components/templates/Table";
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 
-
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
-
 async function api(email,name){
   try{
-      const response = await axios.get(ENDPOINT + '/api/v1/webgui/article');
-      if(response.data.status == "SUCCESS"){
+      const response = await axios.get(process.env.REACT_APP_API_URI  + '/api/v1/webgui/article');
+      if(response.status == 200){
           return [true,response.data.result]
       }else{
           return [false,null]

@@ -10,18 +10,16 @@ import Radio from '@material-ui/core/Radio';
 
 import Typography from '@material-ui/core/Typography';
 
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
-
 async function api(email,session,title,type,count){
   try{
-      const response = await axios.post(ENDPOINT + '/api/v1/webgui/article_request', {
+      const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/article_request', {
           email: email,
           session:session,
           title:title,
           type:type,
           count:count
       });
-      if(response.data.status == "SUCCESS"){
+      if(response.status == 200){
           return true
       }else{
           return false

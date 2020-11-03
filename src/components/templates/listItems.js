@@ -57,7 +57,7 @@ function ListItems(props){
         <ListItemText primary="お問い合わせ" />
       </ListItem>
       <Divider />
-        {localStorage.getItem("email") == "uiljpfs4fg5hsxzrnhknpdqfx@gmail.com" &&
+        {localStorage.getItem("admin") &&
           <>
             <Link to={"/planregist"} style={{display:'block',textDecoration:'none',color:'#000000'}}>
               <ListItem button>

@@ -6,7 +6,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   const session = localStorage.getItem("session");
   const maxAge = localStorage.getItem("maxAge");
   const email = localStorage.getItem("email");
-  if(session && maxAge > new Date().getTime()/1000 && email == "uiljpfs4fg5hsxzrnhknpdqfx@gmail.com"){
+  const admin = localStorage.getItem("admin");
+  if(session && maxAge > new Date().getTime()/1000 && admin){
     return <Route {...rest} render={(props) => <Component {...rest} {...props} />} />;
   }else{
     return <Redirect to={{ pathname: "/signin" }} />;

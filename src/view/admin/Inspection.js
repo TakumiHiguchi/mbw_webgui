@@ -16,9 +16,6 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
-
-
 class Inspection extends React.Component{
   constructor(props){
     super(props);
@@ -42,8 +39,8 @@ class Inspection extends React.Component{
   
   async getData(key,email,session){
     try{
-        const response = await axios.get(ENDPOINT + '/api/v1/webgui/article_request/'+key+'/edit?email='+email+'&session='+session)
-        if(response.data.status == "SUCCESS"){
+        const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/admin/article_request/'+key+'/edit?email='+email+'&session='+session)
+        if(response.status == 200){
             return [true,response.data.result]
         }else{
             return [false,null]
@@ -57,12 +54,12 @@ class Inspection extends React.Component{
 
   async reSubmit(key){
     try{
-        const response = await axios.post(ENDPOINT + '/api/v1/webgui/article_request/resubmit', {
+        const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/admin/article_request/resubmit', {
           email: localStorage.getItem("email"),
           session:localStorage.getItem("session"),
           key:key
       });
-      if(response.data.status == "SUCCESS"){
+      if(response.status == 200){
           return true
       }else{
           console.log(response)
@@ -96,7 +93,7 @@ class Inspection extends React.Component{
   async postArticle(description,releaseTime,tags,thumbnail){
     const {key} = this.props.match.params;
     try{
-      const response = await axios.post(ENDPOINT + '/api/v1/webgui/article', {
+      const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/article', {
         email: localStorage.getItem("email"),
         session:localStorage.getItem("session"),
         key:key,
@@ -107,7 +104,7 @@ class Inspection extends React.Component{
         thumbnail:thumbnail,
         tags:tags
       });
-      if(response.data.status == "SUCCESS"){
+      if(response.status == 200){
           this.props.history.push('/')
       }else{
           console.log(response)

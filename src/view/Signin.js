@@ -15,13 +15,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { withRouter } from "react-router-dom";
 
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit">
         music.branchwithWebGUI
       </Link>{' '}
       {new Date().getFullYear()}
@@ -32,15 +30,16 @@ function Copyright() {
 
 async function api(email,password){
   try{
-      const response = await axios.post(ENDPOINT + '/api/v1/webgui/writer/signin', {
+      const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/writer/signin', {
           email: email,
           phrase: password,
       });
       
-      if(response.data.status == "SUCCESS"){
+      if(response.status == 200){
           localStorage.setItem("session", response.data.session);
           localStorage.setItem("email", email);
           localStorage.setItem("maxAge", response.data.maxAge);
+          localStorage.setItem("admin", response.data.admin);
           return true
       }else{
           return false

@@ -15,8 +15,6 @@ import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 
 
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -51,9 +49,9 @@ const Styles = {
 
 async function api(email,name){
   try{
-      const response = await axios.get(ENDPOINT + '/api/v1/webgui/plan_register?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
+      const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/admin/plan_register?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
       
-      if(response.data.status == "SUCCESS"){
+      if(response.status == 200){
           return [true,response.data.result]
       }else{
           return [false,null]

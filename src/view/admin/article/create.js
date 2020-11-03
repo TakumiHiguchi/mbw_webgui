@@ -14,9 +14,6 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
-
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
-
 class HomePage extends React.Component{
   constructor(props){
     super(props);
@@ -36,12 +33,10 @@ class HomePage extends React.Component{
     }
   }
   async postArticle(description,releaseTime,tags,thumbnail){
-    const {key} = this.props.match.params;
     try{
-      const response = await axios.post(ENDPOINT + '/api/v1/webgui/article', {
+      const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/admin/article', {
         email: localStorage.getItem("email"),
         session:localStorage.getItem("session"),
-        key:key,
         title:this.state.title,
         content:this.state.mainInsCont,
         description:description,
@@ -49,7 +44,7 @@ class HomePage extends React.Component{
         thumbnail:thumbnail,
         tags:tags
       });
-      if(response.data.status == "SUCCESS"){
+      if(response.status == 200){
           this.props.history.push('/')
       }else{
           console.log(response)

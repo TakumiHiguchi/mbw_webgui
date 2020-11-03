@@ -16,8 +16,6 @@ import Container from '@material-ui/core/Container';
 import { withRouter } from "react-router-dom";
 import ResultWindow from '../components/ResultWindow'
 
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
-
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
@@ -33,7 +31,7 @@ function Copyright() {
 
 async function api(key,session){
   try{
-      const response = await axios.get(ENDPOINT + '/api/v1/webgui/plan_register/'+key+'?session='+session);
+      const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/plan_register/'+key+'?session='+session);
       console.log(response)
       return response.data
   }catch(e){
@@ -44,7 +42,7 @@ async function api(key,session){
 
 async function signup(email,password,key,session){
   try{
-      const response = await axios.post(ENDPOINT + '/api/v1/webgui/writer/signup', {
+      const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/writer/signup', {
           email: email,
           phrase: password,
           key:key,
@@ -126,7 +124,7 @@ class SignIn extends React.Component{
     this.rWindow(true,0,"作成中...");
     const result = await signup(this.state.user.email,password,this.state.params.k,this.state.params.s);
     if(result){
-      if(result.status == "SUCCESS"){
+      if(result.status == "200"){
         //作成成功
         this.rWindow(true,1,"アカウントを作成しました。サインインしてください");
         setTimeout(async () => {
@@ -172,7 +170,7 @@ class SignIn extends React.Component{
   async checkParams(params){
     if(params.s != null && params.k != null){
       const result = await api(params.k,params.s);
-      if(result && result.status == "SUCCESS"){
+      if(result && result.status == "200"){
         const user = result.result[0];
         this.setState({user:{name:user.name,email:user.email}})
       }else{

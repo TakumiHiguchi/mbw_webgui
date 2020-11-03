@@ -6,17 +6,16 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
 import Typography from '@material-ui/core/Typography';
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 
 async function api(email,name){
   try{
-      const response = await axios.post(ENDPOINT + '/api/v1/webgui/plan_register', {
+      const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/admin/plan_register', {
           email: localStorage.getItem("email"),
           session:localStorage.getItem("session"),
           userEmail: email,
           name: name,
       });
-      if(response.data.status == "SUCCESS"){
+      if(response.status == 200){
           return true
       }else{
           return false

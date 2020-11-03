@@ -8,13 +8,10 @@ import Confirmation from "./can/Confirmation";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 
-
-
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
 async function api(){
   try{
-      const response = await axios.get(ENDPOINT + '/api/v1/webgui/article_request/can?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
-      if(response.data.status == "SUCCESS"){
+      const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/article_request/can?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
+      if(response.status === 200){
           return [true,response.data.result]
       }else{
           return [false,null]
@@ -55,13 +52,13 @@ class HomePage extends React.Component{
   async assign(){
     
     try{
-      const response = await axios.post(ENDPOINT + '/api/v1/webgui/unapproved_article', {
+      const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/unapproved_article', {
           email: localStorage.getItem("email"),
           session:localStorage.getItem("session"),
           key:this.state.clickKey
       });
       
-      if(response.data.status == "SUCCESS"){
+      if(response.status === 200){
           this.getData();
           this.props.history.push('/can/'+this.state.clickKey)
           return true
