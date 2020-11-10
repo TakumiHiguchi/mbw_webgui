@@ -43,7 +43,7 @@ class CreatePage extends React.Component{
 
   render(){
     return (
-      <Defaulttemplate>
+      <Defaulttemplate title={"執筆可能記事"}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8} lg={12} className="flex-jus-between">
             <div>

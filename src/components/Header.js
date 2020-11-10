@@ -13,7 +13,7 @@ function Header(props) {
   return (
     <AppBar>
         <Toolbar style={styles.toolbar}>
-          {!props.is_no_writter &&
+          {props.is_signined &&
             <IconButton
               edge="start"
               color="inherit"
@@ -27,7 +27,7 @@ function Header(props) {
           <Typography component="h1" variant="h6" color="inherit" noWrap style={styles.title}>
             music.branchwithWebGUI.β | {props.title}
           </Typography>
-          {!props.is_no_writter &&
+          {props.is_signined &&
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />

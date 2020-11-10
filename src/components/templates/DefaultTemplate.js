@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 function Defaulttemplate(props){
   return(
     <div className="App">
-      <Header title={"執筆可能記事"} handleSidebar={() => this.handleSidebar()}/>
+      <Header handleSidebar={() => this.handleSidebar()} {...props}/>
       {props.is_signined ?
         <SinginedBody {...props} />
         :
