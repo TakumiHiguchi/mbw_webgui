@@ -106,7 +106,7 @@ class Inspection extends React.Component{
       });
       if(response.status == 200){
           this.rWindow(true,1,"保存しました");
-          
+          this.props.history.push('/')
       }else{
         this.rWindow(true,1,"保存に失敗しました");
           return false

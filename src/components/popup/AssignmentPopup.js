@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 
 async function api(email,session,title,type,count){
   try{
-      const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/article_request', {
+      const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/admin/article_request', {
           email: email,
           session:session,
           title:title,

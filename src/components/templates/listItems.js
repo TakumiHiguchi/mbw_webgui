@@ -57,7 +57,7 @@ function ListItems(props){
         <ListItemText primary="お問い合わせ" />
       </ListItem>
       <Divider />
-        {localStorage.getItem("admin") &&
+        {localStorage.getItem("admin") == "true" &&
           <>
             <Link to={"/planregist"} style={{display:'block',textDecoration:'none',color:'#000000'}}>
               <ListItem button>

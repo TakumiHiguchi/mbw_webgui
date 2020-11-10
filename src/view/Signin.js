@@ -36,6 +36,7 @@ async function api(email,password){
       });
       
       if(response.status == 200){
+        console.log(response.data)
           localStorage.setItem("session", response.data.session);
           localStorage.setItem("email", email);
           localStorage.setItem("maxAge", response.data.maxAge);
