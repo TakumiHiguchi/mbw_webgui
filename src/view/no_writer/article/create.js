@@ -52,7 +52,6 @@ class CreatePage extends React.Component{
             </div>
             <div>
               <div style={{display:'inline-block',marginRight:'15px'}}>{this.state.chrCount} / 2000文字</div>
-              <SubmitBotton label="下書きに保存する" style={{marginRight:'15px'}} onClick={() => this.handleOnSubmit(1)}/>
               <SubmitBotton label="提出する" color="primary" onClick={() => this.handleOnSubmit(1)} disabled={parseInt(this.state.chrCount) < 2000}/>
             </div>
           </Grid>
