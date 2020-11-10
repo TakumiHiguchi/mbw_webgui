@@ -30,4 +30,10 @@ music.branchwithの管理コンソールです。
 
 6. join [mbw-webgui.localhost](http://mbw-webgui.localhost/)
 
+## Env
+  .envに以下の内容を追加してください。
+  ```
+    REACT_APP_API_URI="http://localhost:3020"
+  ```
+
 music.branchwith群の詳しい起動方法は、[mbw-nginx-proxy](https://github.com/TakumiHiguchi/mbw-nginx-proxy)のREADMEを見てください。
