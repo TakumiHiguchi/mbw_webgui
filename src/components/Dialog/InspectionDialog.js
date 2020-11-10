@@ -72,6 +72,29 @@ const DialogActions = withStyles((theme) => ({
   },
 }))(MuiDialogActions);
 
+const resizeImage = (base64, min_size, callback) => {
+  const MIN_SIZE = min_size;
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var image = new Image();
+  image.crossOrigin = "Anonymous";
+  image.onload = function(event){
+      var dstWidth, dstHeight;
+      if (this.width > this.height) {
+          dstWidth = MIN_SIZE;
+          dstHeight = this.height * MIN_SIZE / this.width;
+      } else {
+          dstHeight = MIN_SIZE;
+          dstWidth = this.width * MIN_SIZE / this.height;
+      }
+      canvas.width = dstWidth;
+      canvas.height = dstHeight;
+      ctx.drawImage(this, 0, 0, this.width, this.height, 0, 0, dstWidth, dstHeight);
+      callback(canvas.toDataURL());
+  };
+  image.src = base64;
+};
+
 export default function CustomizedDialogs(props) {
   const [description, setDescription] = React.useState("");
   const [selectedDate, setSelectedDate] = React.useState(new Date());
@@ -90,9 +113,8 @@ export default function CustomizedDialogs(props) {
     let reader = new FileReader();
     reader.readAsDataURL(thum[0]);
     reader.onload = async () => {
-      setThumbnail(reader.result)
+      resizeImage(reader.result, 600, (result) => setThumbnail(result))
     }
-    
   }
 
   const addTag = (tag) =>{
@@ -119,9 +141,13 @@ export default function CustomizedDialogs(props) {
             <Dropzone onDrop={acceptedFiles => createBase64Thumbnail(acceptedFiles)}>
               {({getRootProps, getInputProps}) => (
                 <section>
-                  <div {...getRootProps()}>
+                  <div {...getRootProps()} >
                     <input {...getInputProps()} />
-                    <p>ファイルをドロップか選択</p>
+                    {thumbnail != "" ?
+                      <img src={thumbnail} style={{width:"100%"}}/>
+                    :
+                      <p>ファイルをドロップか選択</p>
+                    }
                   </div>
                 </section>
               )}
@@ -177,3 +203,4 @@ export default function CustomizedDialogs(props) {
       </Dialog>
   );
 }
+

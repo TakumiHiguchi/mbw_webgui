@@ -46,6 +46,7 @@ export default function CustomizedInputBase(props) {
         inputProps={{ 'aria-label': 'タグを追加' }}
         onChange={(e) => setTag(e.target.value)}
         value={tag}
+        onKeyDown={(e) => e.key == 'Enter' && addTag() } 
       />
       <input type="text" name="dummy" style={{display:'none'}} />
       <IconButton className={classes.iconButton} aria-label="search" onClick={() => addTag()}>
