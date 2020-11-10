@@ -51,7 +51,7 @@ const Styles = {
 
 async function api(){
   try{
-      const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/article_request?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
+      const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/admin/article_request?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
       if(response.status === 200){
           return [true,response.data.result]
       }else{
