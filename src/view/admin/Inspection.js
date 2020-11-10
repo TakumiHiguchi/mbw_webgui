@@ -196,7 +196,6 @@ class Inspection extends React.Component{
                     </Button>
                   :
                     <Button
-                      
                       type="submit"
                       variant="contained"
                       color="primary"

@@ -42,7 +42,8 @@ const tagContainer={
   margin:'10px 10px 0px 0',
   height:'1.2em',
   color:'white',
-  lineHeight:'1.2em'
+  lineHeight:'1.2em',
+  cursor:'pointer'
 }
 
 const DialogTitle = withStyles(styles)((props) => {
@@ -192,7 +193,7 @@ export default function CustomizedDialogs(props) {
           />
           <Form addTag={(tag) => addTag(tag)}/>
           {tags.map((d) =>
-            <div style={tagContainer}># {d}</div>
+            <div style={tagContainer} onClick={() => setTagsData(tags.filter(word => word != d)) }># {d}</div>
           )}
         </DialogContent>
         <DialogActions>
