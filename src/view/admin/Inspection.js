@@ -5,6 +5,7 @@ import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Editor from "../../components/Editor";
 import InspectionDialog from "../../components/Dialog/InspectionDialog";
+import ResultWindow from '../../components/ResultWindow'
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 
@@ -86,13 +87,12 @@ class Inspection extends React.Component{
     if(type === 0){
       const result = this.reSubmit(key);
       if(result) this.props.history.push('/')
-    }else{
-
     }
   }
   async postArticle(description,releaseTime,tags,thumbnail){
     const {key} = this.props.match.params;
     try{
+      this.rWindow(true,0,"保存中");
       const response = await axios.post(process.env.REACT_APP_API_URI + '/api/v1/webgui/article', {
         email: localStorage.getItem("email"),
         session:localStorage.getItem("session"),
@@ -105,17 +105,34 @@ class Inspection extends React.Component{
         tags:tags
       });
       if(response.status == 200){
-          this.props.history.push('/')
+          this.rWindow(true,1,"保存しました");
+          
       }else{
-          console.log(response)
+        this.rWindow(true,1,"保存に失敗しました");
           return false
       }
           
     }catch(e){
-      console.log("通信に失敗しました。"+e)
+      this.rWindow(true,1,"保存に失敗しましたerror: " + e);
       return false
     }
   }
+
+  rWindow(window_bool,type,cont){
+    let ins = this.state.rWindow;
+    if(window_bool){
+        ins.isRWindow = window_bool;
+    }else{
+        if(ins.isRWindow !== 0){
+            ins.isRWindow = window_bool;
+        }
+    }
+    
+    ins.type = type;
+    ins.mes = cont;
+    this.setState({rWindow:ins});
+  }
+
   async componentDidMount(){
     const {key} = this.props.match.params
     const result = await this.getData(key,localStorage.getItem("email"),localStorage.getItem("session"));
@@ -218,6 +235,7 @@ class Inspection extends React.Component{
           />
           </Main>
         </MainRoot>
+        <ResultWindow value={this.state.rWindow} action={(a,b,c) => this.rWindow(a,this.state.rWindow.type,this.state.rWindow.mes)}/>
       </div>
     );
   }
