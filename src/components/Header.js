@@ -13,23 +13,27 @@ function Header(props) {
   return (
     <AppBar>
         <Toolbar style={styles.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={props.handleSidebar}
-            style={styles.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
+          {!props.is_no_writter &&
+            <IconButton
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              onClick={props.handleSidebar}
+              style={styles.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+          }
           <Typography component="h1" variant="h6" color="inherit" noWrap style={styles.title}>
             music.branchwithWebGUI.β | {props.title}
           </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          {!props.is_no_writter &&
+            <IconButton color="inherit">
+              <Badge badgeContent={4} color="secondary">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+          }
         </Toolbar>
     </AppBar>
   );
