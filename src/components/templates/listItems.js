@@ -56,9 +56,22 @@ function ListItems(props){
         </ListItemIcon>
         <ListItemText primary="お問い合わせ" />
       </ListItem>
-      <Divider />
+      {localStorage.getItem("editor") == "true" &&
+        <>
+          <Divider />
+          <Link to={"/editor/assignment"} style={{display:'block',textDecoration:'none',color:'#000000'}}>
+            <ListItem button>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="検修" />
+            </ListItem>
+          </Link>
+        </>
+      }
         {localStorage.getItem("admin") == "true" &&
           <>
+            <Divider />
             <Link to={"/planregist"} style={{display:'block',textDecoration:'none',color:'#000000'}}>
               <ListItem button>
                 <ListItemIcon>

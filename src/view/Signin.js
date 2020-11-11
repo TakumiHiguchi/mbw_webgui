@@ -41,6 +41,7 @@ async function api(email,password){
           localStorage.setItem("email", email);
           localStorage.setItem("maxAge", response.data.maxAge);
           localStorage.setItem("admin", response.data.admin);
+          localStorage.setItem("editor", response.data.editor);
           return true
       }else{
           return false

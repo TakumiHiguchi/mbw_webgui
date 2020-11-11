@@ -1,34 +1,12 @@
 import React from "react";
-import GenericTemplate from "../../components/dashboard/Dashboard";
 import axios from "axios";
-import Header from "../../components/Header";
-import Sidebar from "../../components/Sidebar";
-import Popup from "../../components/popup/AssignmentPopup";
+import Defaulttemplate from "../../../components/templates/DefaultTemplate";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 
 import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import AssignmentTable from "../../components/templates/AssignmentTable";
-import Link from '@material-ui/core/Link';
-import Button from '@material-ui/core/Button';
-
-
-const ENDPOINT = 'https://mbwapi.herokuapp.com/'
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import AssignmentTable from "../../../components/templates/AssignmentTable";
 
 const Styles = {
   paper: {
@@ -51,13 +29,12 @@ const Styles = {
 
 async function api(){
   try{
-      const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/admin/article_request?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
+      const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/editor/article_request?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"))
       if(response.status === 200){
           return [true,response.data.result]
       }else{
           return [false,null]
       }
-      
   }catch(e){
     console.log("通信に失敗しました。")
     return [false,null]
@@ -87,13 +64,23 @@ class Assignment extends React.Component{
           case 1: type="特集記事";break;
         }
         switch(data.status){
-          case 0: status="依頼中";break;
           case 1: status="ユーザーが執筆しています";break;
           case 2: status="記事を研修してください";break;
           case 3: status="再提出";break;
         }
         
-        return {title:data.title,type:data.type,status:data.status,typeString:type,statusString:status,key:data.key,maxAge:data.maxAge,count:data.count,submissionTime:data.submissionTime,user_name: data.user_name}
+        return({
+          title:data.title,
+          type:data.type,
+          status:data.status,
+          typeString:type,
+          statusString:status,
+          key:data.key,
+          maxAge:data.maxAge,
+          count:data.count,
+          submissionTime:data.submissionTime,
+          user_name: data.user_name
+        })
       })
       this.setState({data:ins})
     }
@@ -104,21 +91,13 @@ class Assignment extends React.Component{
   }
   render(){
     return (
-      <div className="App">
-        <Header title={"記事を依頼"} handleSidebar={() => this.handleSidebar()}/>
-        <MainRoot>
-          <Sidebar isOpen={this.state.isSidebar} />
+      <Defaulttemplate title={"検修可能記事"} is_signined>
           <Main style={styles.main}>
             <Container maxWidth="lg">
-              <Button variant="contained" color="primary" style={{marginBottom:"10px"}} 
-                onClick={() => this.setState({isPopup:true})}
-              >
-                新しく作成する
-              </Button>
               <Grid container spacing={3}>
                 <Grid item xs={12} md={8} lg={12} >
                   <AssignmentTable 
-                    label={["タイトル","種類","状況","最低文字数","納期","提出","ユーザー",""]}
+                    label={["タイトル","種類","状況","最低文字数","納期","提出","提出者",""]}
                     rows={this.state.data}
                     action={{
                       click:(status,key) => this.props.history.push('/assignment/'+key)
@@ -128,13 +107,7 @@ class Assignment extends React.Component{
               </Grid>
             </Container>
           </Main>
-          <Popup 
-            isPopup={this.state.isPopup} 
-            action={(val) => this.setState({isPopup:val})}
-            reload={() => this.getData()}
-          />
-        </MainRoot>
-      </div>
+        </Defaulttemplate>
     );
   }
 }

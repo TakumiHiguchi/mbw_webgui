@@ -172,6 +172,7 @@ class SignIn extends React.Component{
       const result = await api(params.k,params.s);
       if(result && result.status == "200"){
         const user = result.result[0];
+        console.log(user)
         this.setState({user:{name:user.name,email:user.email}})
       }else{
         this.setState({expired:true});

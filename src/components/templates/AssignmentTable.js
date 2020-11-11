@@ -39,8 +39,9 @@ export default function SimpleTable(props) {
                                 <>
                                     {new Date(row.submissionTime * 1000).toLocaleDateString()} {new Date(row.submissionTime * 1000).toLocaleTimeString()}
                                 </>
-                            }                   
+                            }
                         </TableCell>
+                        <TableCell align="left">{row.user_name}</TableCell>
                         <TableCell align="right">
                             {row.status === 2 &&
                                 <Button variant="contained" color="primary" style={{margin:'0 10px'}} onClick={() => props.action.click(row.status,row.key)}>

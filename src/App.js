@@ -31,8 +31,12 @@ import ArticleIndex from "./view/admin/article/index";
 import ArticleCreate from "./view/admin/article/create";
 import PrivateRoute from './view/PrivateRoute';
 import AdminRoute from './view/AdminRoute';
+import EditorRoute from './view/EditorRoute';
 import Assignment from "./view/admin/Assignment";
 import NoWritterArticleCreate from "./view/no_writer/article/create";
+
+//editor
+import EditorAssignment from "./view/editor/Assignment/index";
 //css
 import './App.scss';
 
@@ -54,6 +58,9 @@ function App() {
           <AdminRoute exact path="/assignment/:key" component={Inspection} />
           <AdminRoute exact path="/article" component={ArticleIndex} />
           <AdminRoute exact path="/article/create" component={ArticleCreate} />
+
+          {/*editor*/}
+          <EditorRoute exact path="/editor/assignment" component={EditorAssignment} />
 
           {/*keyとパスがあればアクセス可能*/}
           <Route exact path="/nw/article/create" component={NoWritterArticleCreate} />
