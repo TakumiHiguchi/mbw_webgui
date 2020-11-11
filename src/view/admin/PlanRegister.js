@@ -52,9 +52,9 @@ async function api(email,name){
       const response = await axios.get(process.env.REACT_APP_API_URI + '/api/v1/webgui/admin/plan_register?email='+localStorage.getItem("email")+'&session='+localStorage.getItem("session"));
       
       if(response.status == 200){
-          return [true,response.data.result]
+        return [true,response.data.result]
       }else{
-          return [false,null]
+        return [false,null]
       }
       
   }catch(e){

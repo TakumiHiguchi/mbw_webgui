@@ -13,16 +13,15 @@ class ControlledEditor extends Component {
     super(props);
     const html = this.props.htmlIns;
     const contentBlock = htmlToDraft(html);
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const editorState = EditorState.createWithContent(contentState);
-      this.state = {
-        editorState,
-      };
-    }
+    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+    const editorState = EditorState.createWithContent(contentState);
+    this.state = {
+      editorState,
+      content:html
+    };
   }
 
-  onEditorStateChange: Function = (editorState) => {
+  onEditorStateChange = (editorState) => {
     this.setState({
       editorState,
     });
@@ -33,18 +32,39 @@ class ControlledEditor extends Component {
       this.props.change(content, count)
     }, 500);
   };
+  handleOnChange = (val) =>{
+    this.setState({
+      content:val
+    });
+    if(nTimer){clearTimeout(nTimer);}
+    nTimer = setTimeout(async () => {
+      const contentBlock = htmlToDraft(val);
+      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+      const editorState = EditorState.createWithContent(contentState);
+      const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
+      this.setState({
+        editorState
+      });
+      const count = EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(content.replace( /<blockquote>(.*)<\/blockquote>/g , "" )).contentBlocks)).getCurrentContent().getPlainText().length
+      this.props.change(content, count)
+    }, 500);
+  }
 
   render() {
     const { editorState } = this.state;
     return (
       <>
-        <Editor
-          editorState={editorState}
-          wrapperClassName="demo-wrapper"
-          editorClassName="demo-editor"
-          onEditorStateChange={this.onEditorStateChange}
-          toolbarCustomButtons={[<MainContentButton musicName={this.props.musicName} artist={this.props.artist}/>]}
-        />
+        {this.props.isClassicEditor ?
+          <textarea value={this.state.content} onChange={(val) => this.handleOnChange(val.target.value)} style={{width:'100%',height:'100%'}}/>
+        :
+          <Editor
+            editorState={editorState}
+            wrapperClassName="demo-wrapper"
+            editorClassName="demo-editor"
+            onEditorStateChange={this.onEditorStateChange}
+            toolbarCustomButtons={[<MainContentButton musicName={this.props.musicName} artist={this.props.artist}/>]}
+          />
+        }
       </>
     )
   }

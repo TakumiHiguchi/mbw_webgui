@@ -9,12 +9,8 @@ function Field(props) {
       margin="normal"
       required
       name="artist"
-      label={props.label}
       type="text"
-      id={props.id}
-      style={props.style}
-      value={props.value}
-      onChange={(e) => props.onChange(e.target.value)}
+      {...props}
     />
   );
 }

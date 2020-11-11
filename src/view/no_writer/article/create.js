@@ -32,8 +32,8 @@ class CreatePage extends React.Component{
   }
   handleOnTfChange(type,value){
     switch(type){
-      case "artist": this.setState({artist:value});break;
-      case "musicName": this.setState({musicName:value});break;
+      case "artist": this.setState({artist:value.target.value});break;
+      case "musicName": this.setState({musicName:value.target.value});break;
     }
   }
 

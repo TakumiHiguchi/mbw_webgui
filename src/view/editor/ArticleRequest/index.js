@@ -100,7 +100,7 @@ class Assignment extends React.Component{
                     label={["タイトル","種類","状況","最低文字数","納期","提出","提出者",""]}
                     rows={this.state.data}
                     action={{
-                      click:(status,key) => this.props.history.push('/assignment/'+key)
+                      click:(status,key) => this.props.history.push('/editor/assignment/'+key + '/edit')
                     }}
                   />
                 </Grid>
