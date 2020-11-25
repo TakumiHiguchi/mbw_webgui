@@ -1,8 +1,10 @@
 import React from "react";
 import axios from "axios";
 import Slider from "react-slick";
-import Editor from "../../../components/Editor";
+import Editor from "../../../components/Editor/InterpretationArticleEditor";
 import InspectionDialog from "../../../components/Dialog/InspectionDialog";
+import TextField from '../../../components/input/textField';
+import SubmitBotton from '../../../components/input/submitButton';
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
 import PageTemplate from "../../../components/templates/page";
@@ -12,24 +14,22 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 
 class HomePage extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      isSidebar:true,
       isOpen:false,
-      mainInsCont:'',
-      rWindow:{isRWindow:0,type:0,mes:""},
-      artist:"artist",
-      musicName:"musicName",
+      isClassicEditor: false,
+      apiend:false,
       count:0,
-      chrCount:0,
-      apiEnd:false,
-      title:"",
-      description:"",
-      editorType:true,
+      chrCount: 0,
+      content: '',
+      title: '',
+      editor:'',
+      mainInsCont:'',
+      rowInputText: '',
+      rWindow:{isRWindow:0,type:0,mes:""},
     }
   }
   async postArticle(description,releaseTime,tags,thumbnail){
@@ -59,14 +59,16 @@ class HomePage extends React.Component{
   async componentDidMount(){
 
   }
-  handleOnChange(val){
-    const count = val.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
-    this.setState({mainInsCont:val,chrCount:count});
+  handleOnChange(val,count){
+    const text = val.replace( /<p>&lt;#interprationBlock&gt;<\/p>/g , '<div class="box1"><span class="box1-title">解釈</span>' ).replace( /<p>&lt;\/#interprationBlock&gt;<\/p>/g , '</div>' )
+    this.setState({mainInsCont:text, content: val, chrCount:count});
   }
   handleOnTfChange(type,value){
     switch(type){
       case "title": this.setState({title:value});break;
       case "description": this.setState({description:value});break;
+      case "artist": this.setState({artist:value.target.value});break;
+      case "musicName": this.setState({musicName:value.target.value});break;
     }
   }
   render(){
@@ -76,39 +78,14 @@ class HomePage extends React.Component{
             <Grid container spacing={3}>
               <Grid item xs={12} md={8} lg={12} className="flex-jus-between">
                 <Grid item xs={12} md={8} lg={10} >
-                  <TextField
-                      variant="outlined"
-                      margin="normal"
-                      fullWidth
-                      required
-                      name="title"
-                      label="タイトル"
-                      type="text"
-                      id="title"
-                      style={{margin:'0 15px 0 0'}}
-                      value={this.state.title}
-                      onChange={(e) => this.handleOnTfChange("title",e.target.value)}
-                  />
+                  <TextField label="アーティスト" id="artist" value={this.state.artist} style={{margin:'0 15px 0 0'}} onChange={(e) => this.handleOnTfChange("artist",e)} />
+                  <TextField label="曲名" id="musicName" value={this.state.musicName} style={{margin:'0 15px 0 0'}} onChange={(e) => this.handleOnTfChange("musicName",e)} />
+                  <TextField label="タイトル" id="title" value={this.state.title} style={{margin:'0 15px 0 0', width: '45%'}} onChange={(e) => this.handleOnTfChange("title",e.target.value)} />
                 </Grid>
                 <Grid item xs={12} md={8} lg={5} style={{textAlign:'right'}}>
-                  <div style={{display:'inline-block',marginRight:'15px'}}>{this.state.chrCount} / {this.state.count}文字</div>
-                  <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={() => this.setState({editorType:!this.state.editorType})}
-                    >
-                      切り替え
-                    </Button>
-                  <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={() => this.setState({isOpen:true})}
-                    >
-                      公開
-                    </Button>
-
+                  <div style={{display:'inline-block',marginRight:'15px'}}>{this.state.chrCount}文字</div>
+                  <SubmitBotton label="切り替え" color="primary" onClick={() => this.setState({editorType:!this.state.editorType})} style={{marginRight:'15px'}}/>
+                  <SubmitBotton label="公開" color="primary" onClick={() => this.setState({isOpen:true})} />
                 </Grid>
               </Grid>
               <Grid item xs={12} md={8} lg={4} >
@@ -121,14 +98,9 @@ class HomePage extends React.Component{
               <Grid item xs={12} md={8} lg={8} >
                 <Card style={{height:'calc(100vh - 204px)',padding:'10px'}}>
                   {this.state.editorType ?
-                    <Editor 
-                        change={(val) => this.handleOnChange(val)}
-                        htmlIns={this.state.mainInsCont}
-                        musicName={this.state.musicName}
-                        artist={this.state.artist}
-                    />
+                    <Editor change={(val, count) => this.handleOnChange(val, count)} htmlIns={this.state.content} musicName={this.state.musicName} artist={this.state.artist} isClassicEditor={this.state.isClassicEditor} />
                   :
-                    <textarea value={this.state.mainInsCont} onChange={(val) => this.handleOnChange(val.target.value)} style={{width:'100%',height:'100%'}}/>
+                    <textarea value={this.state.content} onChange={(val) => this.handleOnChange(val.target.value, this.state.chrCount)} style={{width:'100%',height:'100%'}}/>
                   }
                 </Card>
               </Grid>
