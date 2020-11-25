@@ -79,8 +79,8 @@ class HomePage extends React.Component{
             <Grid container spacing={3}>
               <Grid item xs={12} md={8} lg={12} className="flex-jus-between">
                 <Grid item xs={12} md={8} lg={10} >
-                  <TextField label="アーティスト" id="artist" value={this.state.artist} style={{margin:'0 15px 0 0'}} onChange={(e) => this.handleOnTfChange("artist",e)} />
-                  <TextField label="曲名" id="musicName" value={this.state.musicName} style={{margin:'0 15px 0 0'}} onChange={(e) => this.handleOnTfChange("musicName",e)} />
+                  <TextField label="アーティスト" id="artist" value={this.state.artist} style={{margin:'0 15px 0 0'}} onChange={(e) => this.handleOnTfChange("artist",e.target.value)} />
+                  <TextField label="曲名" id="musicName" value={this.state.musicName} style={{margin:'0 15px 0 0'}} onChange={(e) => this.handleOnTfChange("musicName",e.target.value)} />
                   <TextField label="タイトル" id="title" value={this.state.title} style={{margin:'0 15px 0 0', width: '45%'}} onChange={(e) => this.handleOnTfChange("title",e.target.value)} />
                 </Grid>
                 <Grid item xs={12} md={8} lg={5} style={{textAlign:'right'}}>

@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
-import Editor from "../../components/Editor";
+import Editor from "../../components/Editor/InterpretationArticleEditor";
 import ResultWindow from '../../components/ResultWindow'
 
 import styled from "styled-components";
@@ -15,7 +15,8 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import TextField from '../../components/input/textField';
+import SubmitBotton from '../../components/input/submitButton';
 
 
 let nTimer;
@@ -75,8 +76,7 @@ class Edit extends React.Component{
   handleSidebar(){
     this.setState({isSidebar:!this.state.isSidebar})
   }
-  handleOnChange(val){
-    const count = val.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length
+  handleOnChange(val, count){
     this.setState({mainInsCont:val,chrCount:count});
     if(nTimer){clearTimeout(nTimer);}
     nTimer = setTimeout(async () => {
@@ -117,8 +117,7 @@ class Edit extends React.Component{
     const result = await getArticleData(key,localStorage.getItem("email"),localStorage.getItem("session"))
 
     if(result[0]){
-      const count = result[1].content.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length -1
-      this.setState({mainInsCont:result[1].content,count:result[1].count,apiEnd:true,chrCount:count})
+      this.setState({mainInsCont:result[1].content,count:result[1].count,apiEnd:true,chrCount:"計測中"})
     }else{
       this.props.history.push('/')
     }
@@ -134,80 +133,26 @@ class Edit extends React.Component{
             <Grid container spacing={3}>
               <Grid item xs={12} md={8} lg={12} className="flex-jus-between">
                 <div>
-                  <TextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      name="artist"
-                      label="アーティスト"
-                      type="text"
-                      id="artist"
-                      style={{margin:'0 15px 0 0'}}
-                      value={this.state.artist}
-                      onChange={(e) => this.handleOnTfChange("artist",e.target.value)}
-                  />
-                  <TextField
-                      variant="outlined"
-                      margin="normal"
-                      required
-                      name="musicName"
-                      label="曲名"
-                      type="text"
-                      id="musicName"
-                      style={{margin:'0 15px 0 0'}}
-                      value={this.state.musicName}
-                      onChange={(e) => this.handleOnTfChange("musicName",e.target.value)}
-                  />
+                  <TextField label="アーティスト" id="artist" value={this.state.artist} style={{margin:'0 15px 0 0'}} onChange={(e) => this.handleOnTfChange("artist",e.target.value)} />
+                  <TextField label="曲名" id="musicName" value={this.state.musicName} style={{margin:'0 15px 0 0'}} onChange={(e) => this.handleOnTfChange("musicName",e.target.value)} />
                 </div>
                 <div>
                   <div style={{display:'inline-block',marginRight:'15px'}}>{this.state.chrCount} / {this.state.count}文字</div>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    style={{marginRight:'15px'}}
-                    onClick={() => this.handleOnSubmit(1)}
-                  >
-                    下書きに保存する
-                  </Button>
-                  {parseInt(this.state.chrCount) <= parseInt(this.state.count) ?
-                    <Button
-                      disabled
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={() => this.handleOnSubmit(0)}
-                    >
-                      提出する
-                    </Button>
-                  :
-                    <Button
-                      
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      onClick={() => this.handleOnSubmit(0)}
-                    >
-                    提出する
-                    </Button>
-                  }
+                  <SubmitBotton label="下書きに保存する" color="contained" onClick={() => this.handleOnSubmit(1)} style={{marginRight:'15px'}} />
+                  <SubmitBotton label="提出する" color="primary" onClick={() => this.handleOnSubmit(0)} disabled={parseInt(this.state.chrCount) <= parseInt(this.state.count)}/>
                 </div>
               </Grid>
               <Grid item xs={12} md={8} lg={4} >
                 <Card style={{height:'calc(100vh - 184px)'}} >
                   <CardContent style={{height:'calc(100% - 32px)'}}>
-                    <p className="scroll-y" style={{height:'100%',margin:0}} dangerouslySetInnerHTML={{__html: this.state.mainInsCont}}></p>
+                    <p className="scroll-y" style={{height:'100%',margin:0}} dangerouslySetInnerHTML={{__html: this.state.mainInsCont.replace( /<p>&lt;#interprationBlock&gt;<\/p>/g , '<div class="box1"><span class="box1-title">解釈</span>' ).replace( /<p>&lt;\/#interprationBlock&gt;<\/p>/g , '</div>' )}}></p>
                   </CardContent>
                 </Card>
               </Grid>
               <Grid item xs={12} md={8} lg={8} >
                 <Card style={{height:'calc(100vh - 204px)',padding:'10px'}}>
                   {this.state.apiEnd &&
-                    <Editor 
-                      change={(val) => this.handleOnChange(val)}
-                      htmlIns={this.state.mainInsCont}
-                      musicName={this.state.musicName}
-                      artist={this.state.artist}
-                    />
+                    <Editor change={(val, count) => this.handleOnChange(val, count)} htmlIns={this.state.mainInsCont} musicName={this.state.musicName} artist={this.state.artist} isClassicEditor={this.state.isClassicEditor} />
                   }
                 </Card>
               </Grid>
