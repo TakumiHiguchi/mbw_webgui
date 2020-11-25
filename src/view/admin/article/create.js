@@ -29,6 +29,7 @@ class HomePage extends React.Component{
       editor:'',
       mainInsCont:'',
       rowInputText: '',
+      editorType:true,
       rWindow:{isRWindow:0,type:0,mes:""},
     }
   }

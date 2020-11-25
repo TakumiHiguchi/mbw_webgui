@@ -76,7 +76,7 @@ class EditPage extends React.Component{
                 <div style={{paddingBottom:10,borderBottom:"1px solid rgba(0, 0, 0, 0.12)"}}>
                   <SubmitBotton label="切り替え" onClick={() => this.setState({isClassicEditor: !this.state.isClassicEditor})} style={{marginRight:'15px'}} />
                 </div>
-                <p className="scroll-y" style={{height:'100%',margin:0}} dangerouslySetInnerHTML={{__html: this.state.content}}></p>
+                <p className="scroll-y" style={{height:'100%',margin:0}} dangerouslySetInnerHTML={{__html: this.state.content.replace( /<p>&lt;#interprationBlock&gt;<\/p>/g , '<div class="box1"><span class="box1-title">解釈</span>' ).replace( /<p>&lt;\/#interprationBlock&gt;<\/p>/g , '</div>' )}}></p>
               </CardContent>
             </Card>
           </Grid>
@@ -156,7 +156,7 @@ class EditPage extends React.Component{
         session:localStorage.getItem("session"),
         key:key,
         title:this.state.title,
-        content:this.state.content,
+        content:this.state.content.replace( /<p>&lt;#interprationBlock&gt;<\/p>/g , '<div class="box1"><span class="box1-title">解釈</span>' ).replace( /<p>&lt;\/#interprationBlock&gt;<\/p>/g , '</div>' ),
         description:description,
         releaseTime:releaseTime,
         thumbnail:thumbnail,
