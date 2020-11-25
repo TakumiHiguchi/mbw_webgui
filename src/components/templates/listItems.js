@@ -67,6 +67,14 @@ function ListItems(props){
               <ListItemText primary="検修" />
             </ListItem>
           </Link>
+          <Link to={"/editor/article"} style={{display:'block',textDecoration:'none',color:'#000000'}}>
+              <ListItem button>
+                <ListItemIcon>
+                  <AssignmentIcon />
+                </ListItemIcon>
+                <ListItemText primary="記事一覧" />
+              </ListItem>
+            </Link>
         </>
       }
         {localStorage.getItem("admin") == "true" &&

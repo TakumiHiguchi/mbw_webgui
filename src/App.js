@@ -16,7 +16,7 @@ import {
 //scss
 import './css/popup.scss'
 import './css/main.scss'
-import './css/mbwStyle.scss'
+import './css/contentStyle.scss'
 
 //view
 import Home from "./view/home";

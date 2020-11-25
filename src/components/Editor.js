@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { EditorState, convertToRaw, ContentState, insertNewBlock } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
@@ -28,17 +28,33 @@ class ControlledEditor extends Component {
     this.props.change(draftToHtml(convertToRaw(editorState.getCurrentContent())))
   };
 
+  myBlockRenderer = (contentBlock) =>{
+    const type = contentBlock.getType();
+    switch (type) {
+      case 'Interpretation':
+        return {
+          component: this.InterpretationBlock,
+        };
+    }
+  }
+
+  InterpretationBlock= () => {
+    return (
+      <div class="box1"><span class="box1-title">解釈</span><p>ここに解釈を執筆</p></div>
+    );
+  }
+
   render() {
-    const { editorState } = this.state;
     return (
       <>
-        <Editor
-          editorState={editorState}
+        {<Editor
+          editorState={this.state.editorState}
           wrapperClassName="demo-wrapper"
           editorClassName="demo-editor"
           onEditorStateChange={this.onEditorStateChange}
           toolbarCustomButtons={[<MainContentButton musicName={this.props.musicName} artist={this.props.artist}/>]}
-        />
+          blockRendererFn={this.myBlockRenderer}
+        />}
       </>
     )
   }

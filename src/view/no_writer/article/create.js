@@ -25,10 +25,10 @@ class CreatePage extends React.Component{
       content: ''
     }
   }
+
   handleOnChange(val, count){
-    // const count = val.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace(/<("[^"]*"|'[^']*'|[^'">])*>/g,'').length
-    if(val == "<p></p>") val = '';
-    this.setState({content:val, chrCount:count});
+    const text = val.replace( /<p>&lt;#interprationBlock&gt;<\/p>/g , '<div class="box1"><span class="box1-title">解釈</span>' ).replace( /<p>&lt;\/#interprationBlock&gt;<\/p>/g , '</div>' )
+    this.setState({content:text, chrCount:count});
   }
   handleOnTfChange(type,value){
     switch(type){

@@ -28,7 +28,7 @@ class ControlledEditor extends Component {
     if(nTimer){clearTimeout(nTimer);}
     nTimer = setTimeout(async () => {
       const content = draftToHtml(convertToRaw(editorState.getCurrentContent()));
-      const count = EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(content.replace( /<blockquote>(.*)<\/blockquote>/g , "" )).contentBlocks)).getCurrentContent().getPlainText().length
+      const count = EditorState.createWithContent(ContentState.createFromBlockArray(htmlToDraft(content.replace( /<blockquote>(.*)<\/blockquote>/g , "" ).replace( /&lt;#interprationBlock&gt;/g , '' ).replace( /&lt;\/#interprationBlock&gt;/g , '' )).contentBlocks)).getCurrentContent().getPlainText().length
       this.props.change(content, count)
     }, 500);
   };

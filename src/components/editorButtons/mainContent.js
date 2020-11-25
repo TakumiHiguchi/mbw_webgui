@@ -27,7 +27,7 @@ export default class CustomOption extends Component {
     let { editorState, onChange } = this.props;
     let curHtml = draftToHtml(convertToRaw(editorState.getCurrentContent()));
     if(curHtml == "<p></p>")curHtml = ""
-    curHtml += '<blockquote>'+ value +'</blockquote><div style="text-align: right;"><span style="font-size: 80%;">' + this.props.musicName +' -'+this.props.artist+'</span></div><p>ここから解釈を執筆</p>'
+    curHtml += '<blockquote>'+ value +'</blockquote><div style="text-align: right;"><span style="font-size: 80%;">' + this.props.musicName +' -'+this.props.artist+'</span></div><p><#interprationBlock></p><p>ここに解釈を執筆</p><p>&lt;/#interprationBlock&gt;</p><p>ここから考察を執筆</p>'
     const contentBlock = htmlToDraft(curHtml);
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
