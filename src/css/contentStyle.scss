@@ -18,7 +18,7 @@ blockquote{
 .box1 {
   position: relative;
   margin:10px 0 15px 0;
-  padding:35px 10px 10px 10px;
+  padding:20px 10px 10px 10px;
   border: dashed 1px #808080;
   border-radius: 8px;
   .box1-title {
@@ -29,6 +29,10 @@ blockquote{
       padding: 0 9px;
       background: #FFF;
       font-weight: bold;
+  }
+  p{
+    margin:0;
+    line-height:1.5em;
   }
 }
 

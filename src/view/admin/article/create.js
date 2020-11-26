@@ -68,8 +68,8 @@ class HomePage extends React.Component{
     switch(type){
       case "title": this.setState({title:value});break;
       case "description": this.setState({description:value});break;
-      case "artist": this.setState({artist:value.target.value});break;
-      case "musicName": this.setState({musicName:value.target.value});break;
+      case "artist": this.setState({artist:value});break;
+      case "musicName": this.setState({musicName:value});break;
     }
   }
   render(){
